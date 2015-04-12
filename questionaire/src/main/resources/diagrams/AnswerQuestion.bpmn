@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://nl.mycompany/answerQuestion">
+  <collaboration id="Collaboration">
+    <participant id="answerQuestion" name="answerQuestion" processRef="answerQuestionProcess"></participant>
+  </collaboration>
+  <process id="answerQuestionProcess" name="answerQuestionProcess" isExecutable="true">
+    <laneSet id="laneSet_answerQuestionProcess">
+      <lane id="client" name="client">
+        <flowNodeRef>startAnswerQuestion</flowNodeRef>
+        <flowNodeRef>answerQuestionTask</flowNodeRef>
+      </lane>
+      <lane id="auditor" name="auditor">
+        <flowNodeRef>stopAnswerQuestion</flowNodeRef>
+        <flowNodeRef>auditQuestionTask</flowNodeRef>
+        <flowNodeRef>auditedGateway</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="startAnswerQuestion" name="startAnswerQuestion"></startEvent>
+    <endEvent id="stopAnswerQuestion" name="stopAnswerQuestion"></endEvent>
+    <userTask id="answerQuestionTask" name="answerQuestionTask" activiti:candidateGroups="clients"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startAnswerQuestion" targetRef="answerQuestionTask"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="answerQuestionTask" targetRef="auditQuestionTask"></sequenceFlow>
+    <userTask id="auditQuestionTask" name="auditQuestionTask" activiti:candidateGroups="auditors"></userTask>
+    <exclusiveGateway id="auditedGateway" name="auditedGateway" default="toEnd"></exclusiveGateway>
+    <sequenceFlow id="flow3" sourceRef="auditQuestionTask" targetRef="auditedGateway"></sequenceFlow>
+    <sequenceFlow id="auditFailed" name="auditFailed" sourceRef="auditedGateway" targetRef="answerQuestionTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${question.auditResult == 'FAIL'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="toEnd" name="toEnd" sourceRef="auditedGateway" targetRef="stopAnswerQuestion"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
+    <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
+      <bpmndi:BPMNShape bpmnElement="answerQuestion" id="BPMNShape_answerQuestion">
+        <omgdc:Bounds height="572.0" width="701.0" x="160.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="client" id="BPMNShape_client">
+        <omgdc:Bounds height="286.0" width="681.0" x="180.0" y="130.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="auditor" id="BPMNShape_auditor">
+        <omgdc:Bounds height="286.0" width="681.0" x="180.0" y="416.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startAnswerQuestion" id="BPMNShape_startAnswerQuestion">
+        <omgdc:Bounds height="35.0" width="35.0" x="200.0" y="230.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="stopAnswerQuestion" id="BPMNShape_stopAnswerQuestion">
+        <omgdc:Bounds height="35.0" width="35.0" x="810.0" y="547.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="answerQuestionTask" id="BPMNShape_answerQuestionTask">
+        <omgdc:Bounds height="61.0" width="121.0" x="400.0" y="217.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="auditQuestionTask" id="BPMNShape_auditQuestionTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="560.0" y="536.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="auditedGateway" id="BPMNShape_auditedGateway">
+        <omgdc:Bounds height="40.0" width="40.0" x="710.0" y="544.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="235.0" y="247.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="247.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="460.0" y="278.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="564.0"></omgdi:waypoint>
+        <omgdi:waypoint x="560.0" y="563.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="665.0" y="563.0"></omgdi:waypoint>
+        <omgdi:waypoint x="710.0" y="564.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="auditFailed" id="BPMNEdge_auditFailed">
+        <omgdi:waypoint x="730.0" y="544.0"></omgdi:waypoint>
+        <omgdi:waypoint x="729.0" y="247.0"></omgdi:waypoint>
+        <omgdi:waypoint x="521.0" y="247.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="740.0" y="544.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toEnd" id="BPMNEdge_toEnd">
+        <omgdi:waypoint x="750.0" y="564.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="564.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="27.0" x="760.0" y="564.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
