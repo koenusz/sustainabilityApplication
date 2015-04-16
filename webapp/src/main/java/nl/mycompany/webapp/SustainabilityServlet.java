@@ -2,15 +2,11 @@ package nl.mycompany.webapp;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
-import ru.xpoft.vaadin.SpringVaadinServlet;
+import com.vaadin.spring.server.SpringVaadinServlet;
 
-import com.vaadin.annotations.VaadinServletConfiguration;
-
-@WebServlet(urlPatterns = "/*", name = "SustainabilityUIServlet", asyncSupported = true, initParams={@WebInitParam(name="beanName", value="sustainabilityApplicationUI")})
-@VaadinServletConfiguration(ui = SustainabilityApplicationUI.class, productionMode = false)
+@WebServlet(urlPatterns = "/*",  asyncSupported = true)
 public class SustainabilityServlet  extends SpringVaadinServlet  {
 
 	

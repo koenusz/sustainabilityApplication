@@ -1,6 +1,7 @@
 package nl.mycompany.questionaire.conf;
 
 import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
+import nl.mycompany.questionaire.identity.aspect.RequireGroupAspect;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,4 +16,6 @@ public class QuestionaireConfiguration {
 		return new CurrentUserFactoryBean();
 	}
 
+	
+	
 }

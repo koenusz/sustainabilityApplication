@@ -28,6 +28,7 @@ public class ProcessInitializer implements Groups {
 		setUpGroups();
 		setUpUsers();
 		deployProcess();
+		
 	}
 
 	public void setUpUsers() {
@@ -84,7 +85,7 @@ public class ProcessInitializer implements Groups {
 		return identityService.createGroupQuery().groupId(groupId)
 				.singleResult() != null;
 	}
-
+	
 	private void deployProcess() {
 		if (!isDeployed()) {
 			 LOG.info("Deploying process");

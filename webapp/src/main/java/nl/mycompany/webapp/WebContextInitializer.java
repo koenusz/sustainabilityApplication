@@ -10,6 +10,8 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import com.vaadin.spring.server.SpringVaadinServlet;
+
 public class WebContextInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(javax.servlet.ServletContext servletContext)
@@ -24,9 +26,8 @@ public class WebContextInitializer implements WebApplicationInitializer {
 
     private void registerServlet(ServletContext servletContext) {
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
-                "vaadin", SustainabilityServlet.class);
+                "vaadin", SpringVaadinServlet.class);
         dispatcher.setLoadOnStartup(1);
-       // dispatcher.addMapping("/*");
-       
+        dispatcher.addMapping("/*");
     }
 }

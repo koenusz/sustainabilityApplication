@@ -49,9 +49,9 @@ public class MainViewImplementation extends Panel implements MainView {
         logOut = new Button("Logout", new Button.ClickListener() {
             public void buttonClick(ClickEvent event) {
 
-            	((SustainabilityApplicationUI)UI.getCurrent()).setLoggedInUser(null);
+            	//((SustainabilityApplicationUI)UI.getCurrent()).setLoggedInUser(null);
             	logOut.setCaption("Login");
-            	navigator.navigateTo(LoginView.NAME);
+            	//navigator.navigateTo(LoginView.NAME);
                 
             }
         });

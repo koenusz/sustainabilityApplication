@@ -2,75 +2,71 @@ package nl.mycompany.webapp;
 
 
 
-import nl.mycompany.webapp.main.MainView;
-import nl.mycompany.webapp.main.MainViewImplementation;
+import nl.mycompany.webapp.ui.login.LoginPresenter;
 import nl.mycompany.webapp.ui.login.LoginView;
-import nl.mycompany.webapp.ui.login.LoginViewComponent;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import ru.xpoft.vaadin.DiscoveryNavigator;
-import ru.xpoft.vaadin.SpringApplicationContext;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringViewProvider;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
-@Component
 @SuppressWarnings("serial")
-@Scope("prototype")
 @Theme("mytheme")
+@SpringUI
 @Widgetset("nl.mycompany.webapp.MyAppWidgetset")
 public class SustainabilityApplicationUI extends UI {
 	
 	 private static final Logger LOG = Logger
 	 .getLogger(SustainabilityApplicationUI.class);
 
-	
-	 @Autowired
-	 private transient ApplicationContext applicationContext;
-	
-	// Create a navigator to control the views
-	
-	 Navigator navigator;
-	
 	private String loggedInUser;
 	
 	@Autowired
-	LoginViewComponent loginViewComponent;
+    private SpringViewProvider viewProvider;
+	
+	private Navigator navigator;
 
+	private String fragmentAndParameters;
+	
 	@Override
     protected void init(VaadinRequest vaadinRequest) {
 		
-		if(applicationContext == null)
-    	{
-    	LOG.debug("applicationContext is null");
-    	}
-		
-		if(SpringApplicationContext.getApplicationContext() == null)
-		{
-			LOG.debug("applicationContext 2 is null");
-		}
-		
-		//Application questionaire = new Application();
-		
-		
-		
-		//navigator = new Navigator(this, this);
-		//navigator.addView(MainView.NAME, new MainViewImplementation(navigator));
-		//navigator.addView(LoginView.NAME, loginViewComponent);
-		//navigator =  new DiscoveryNavigator(this, this);
-		
-		//navigator.getDisplay().showView(new LoginViewComponent());
-		
+		final VerticalLayout root = new VerticalLayout();
+        root.setSizeFull();
+        root.setMargin(true);
+        root.setSpacing(true);
+        setContent(root);
+
+        final CssLayout navigationBar = new CssLayout();
+        navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        navigationBar.addComponent(createNavigationButton("View Scoped View",
+                ScopedView.VIEW_NAME));
+        navigationBar.addComponent(createNavigationButton("View default View",
+                DefaultView.VIEW_NAME));
+        navigationBar.addComponent(createNavigationButton("View login View",
+        		LoginView.VIEW_NAME));
+        root.addComponent(navigationBar);
+
+        final Panel viewContainer = new Panel();
+        viewContainer.setSizeFull();
+        root.addComponent(viewContainer);
+        root.setExpandRatio(viewContainer, 1.0f);
+
+        navigator = new Navigator(this, viewContainer);
+        navigator.addProvider(viewProvider);
+			
 		 // we'll handle permissions with a listener here, you could also do
         // that in the View itself.
         navigator.addViewChangeListener(new ViewChangeListener() {
@@ -80,16 +76,15 @@ public class SustainabilityApplicationUI extends UI {
             	
             	
             	LOG.debug("view: " + event.getViewName());
-            	if (SustainabilityApplicationUI.getCurrent().getLoggedInUser() == null && !(event.getViewName().equals("login"))) {
+            	if (SustainabilityApplicationUI.getCurrent().getLoggedInUser() == null && !event.getViewName().equals("login")) {
             		// Show to LoginView instead, pass intended view
-            		String fragmentAndParameters = event.getViewName();
+            		fragmentAndParameters = event.getViewName();
             		if (event.getParameters() != null) {
             			fragmentAndParameters += "/";
             			fragmentAndParameters += event.getParameters();
             		}
+            		LOG.debug("fragmentAndParameters: " + fragmentAndParameters);
             		
-            		LoginViewComponent login = (LoginViewComponent) applicationContext.getBean("loginViewComponent");
-            		login.setFragmentAndParameters(fragmentAndParameters);
             		navigator.navigateTo("login");
             		
             		return false;
@@ -107,6 +102,19 @@ public class SustainabilityApplicationUI extends UI {
 
 
     }
+	
+	 private Button createNavigationButton(String caption, final String viewName) {
+	        Button button = new Button(caption);
+	        button.addStyleName(ValoTheme.BUTTON_SMALL);
+	        // If you didn't choose Java 8 when creating the project, convert this to an anonymous listener class
+	        button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
+	        return button;
+	    }
+
+	
+	public static SustainabilityApplicationUI getCurrent() {
+		return (SustainabilityApplicationUI)UI.getCurrent();
+	}
 
 	public String getLoggedInUser() {
 		return loggedInUser;
@@ -116,18 +124,14 @@ public class SustainabilityApplicationUI extends UI {
 		this.loggedInUser = loggedInUser;
 	}
 	
-	public static SustainabilityApplicationUI getCurrent() {
-		return (SustainabilityApplicationUI)UI.getCurrent();
+	public void navigateToFragmentAndParameters()
+	{
+		this.navigateTo(fragmentAndParameters);
 	}
-
-	public Navigator getNavigator() {
-		return navigator;
-	}
-
-	@Override
-	public void markAsDirty() {
-		// TODO Auto-generated method stub
-		
+	
+	public void navigateTo(String viewName)
+	{
+		navigator.navigateTo(viewName);
 	}
 
 }

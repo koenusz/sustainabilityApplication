@@ -17,6 +17,8 @@ public class Question {
 	private String domain;
 	
 	private String auditResult;
+	
+	private String answer;
 
 	public long getId() {
 		return id;
@@ -48,6 +50,14 @@ public class Question {
 
 	public void setAuditResult(String auditResult) {
 		this.auditResult = auditResult;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
 	

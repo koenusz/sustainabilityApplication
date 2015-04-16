@@ -24,7 +24,7 @@
     <exclusiveGateway id="auditedGateway" name="auditedGateway" default="toEnd"></exclusiveGateway>
     <sequenceFlow id="flow3" sourceRef="auditQuestionTask" targetRef="auditedGateway"></sequenceFlow>
     <sequenceFlow id="auditFailed" name="auditFailed" sourceRef="auditedGateway" targetRef="answerQuestionTask">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${question.auditResult == 'FAIL'}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${question.auditResult == 'DENIED'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="toEnd" name="toEnd" sourceRef="auditedGateway" targetRef="stopAnswerQuestion"></sequenceFlow>
   </process>

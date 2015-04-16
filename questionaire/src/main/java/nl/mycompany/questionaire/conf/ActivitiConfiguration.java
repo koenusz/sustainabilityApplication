@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import nl.mycompany.questionaire.domain.Question;
+
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -44,12 +46,12 @@ public class ActivitiConfiguration {
 
 	
 	
-	//Guava eventbus
+	/*//Guava eventbus
 	@Bean
 	public EventBus eventBus()
 	{      
          return new EventBus();
-	}
+	}*/
 	
 	   @Resource
 	    private Environment env;

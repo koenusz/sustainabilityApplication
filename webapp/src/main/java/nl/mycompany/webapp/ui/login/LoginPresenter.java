@@ -1,41 +1,42 @@
 package nl.mycompany.webapp.ui.login;
 
-import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
+import nl.mycompany.webapp.SustainabilityApplicationUI;
 
 import org.activiti.engine.IdentityService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
-public class LoginPresenter {
+import com.vaadin.spring.annotation.SpringComponent;
+
+@SpringComponent
+public class LoginPresenter  {
+
+	private static final Logger LOG = Logger.getLogger(LoginPresenter.class);
+
+	@Autowired
+	protected transient IdentityService identityService;
+
 	
-	private static final Logger LOG = Logger
-			.getLogger(LoginPresenter.class);
+	private transient LoginView loginView;
 
- 
-    @Autowired
-    protected transient IdentityService identityService;
-    
-    @Autowired
-    protected transient CurrentUserFactoryBean currentUserFactoryBean;    
-    
-    public void attemptLogin(String username, String password) {
-       // SustainabilityApplicationUI.getCurrent().setLoggedInUser(username);
-    	
-    	LOG.debug("logging in: " + username );
-    	
-    	if (identityService.checkPassword(username, password)) {
-            currentUserFactoryBean.setCurrentUsername(username);
-            LOG.debug("login succesfull");
-            //fireEvent(new UserLoggedInEvent(getView(), username));
-        } else {
-        	LOG.debug("login failed");
-            //getView().clearForm();
-            //getView().showLoginFailed();s
-        }
-    }
+	public void setLoginView(LoginView loginView) {
+		this.loginView = loginView;
+	}
+	
+	public void attemptLogin(String username, String password) {
+		LOG.debug("logging in: " + username);
+		if (identityService.checkPassword(username, password)) {
+			LOG.debug("login succesfull");
+			loginView.clearForm();
+			SustainabilityApplicationUI.getCurrent().setLoggedInUser(username);
+			SustainabilityApplicationUI.getCurrent().navigateToFragmentAndParameters();
+			
+		} else {
+			LOG.debug("login failed");
+			loginView.clearForm();
+			loginView.showLoginFailed();
+		}
+	}
 
 
-    
 }
