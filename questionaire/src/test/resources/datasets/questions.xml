@@ -1,0 +1,4 @@
+<dataset>
+    <question id="1" questionText="Lorem ipsum" domain="Foo" />
+    <question id="2" questionText="Lorem ipsum" domain="Bar" />
+</dataset>

@@ -12,6 +12,8 @@ public interface BaseRepository<T, ID extends Serializable> extends
 		Repository<T, ID> {
 
 	void delete(T deleted);
+	
+	void deleteAll();
 
 	List<T> findAll();
 

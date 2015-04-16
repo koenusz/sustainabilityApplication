@@ -1,0 +1,8 @@
+<dataset>
+    <question id="1" questionText="Lorem ipsum" domain="Foo" />
+    <question id="2" questionText="Lorem ipsum" domain="Bar" />
+	<client name="sjaak" />
+    <questionaire id="1"  name="testQuestionaire" client_name="sjaak" creationdate="[NOW]"/>
+    <questionaire_question questionaire_id="1" question_id="1"/>
+    <questionaire_question questionaire_id="1" question_id="2"/>
+</dataset>
