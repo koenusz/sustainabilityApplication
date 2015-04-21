@@ -1,6 +1,8 @@
 package nl.mycompany.questionaire.conf;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -8,6 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import nl.mycompany.questionaire.domain.Question;
+import nl.mycompany.questionaire.event.MyEventListener;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
@@ -16,6 +19,7 @@ import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -112,9 +116,16 @@ public class ActivitiConfiguration {
 			
 			return manager;
 		}
-	
+		
+		
 	@Bean
-	public SpringProcessEngineConfiguration processEngineConfiguration(PlatformTransactionManager manager, EntityManagerFactory emf)
+	public MyEventListener myEventListener()
+	{
+		return new MyEventListener();
+	}
+		
+	@Bean
+	public SpringProcessEngineConfiguration processEngineConfiguration(PlatformTransactionManager manager, EntityManagerFactory emf, MyEventListener myEventListener)
 	{
 		SpringProcessEngineConfiguration conf = new SpringProcessEngineConfiguration();
 		conf.setDataSource(dataSource());
@@ -127,6 +138,10 @@ public class ActivitiConfiguration {
 		conf.setJpaEntityManagerFactory(emf);
 		conf.setJpaHandleTransaction(false);
 		conf.setJpaCloseEntityManager(false);
+		
+		List<ActivitiEventListener> listenerList = new ArrayList<>();
+		listenerList.add(myEventListener);
+		conf.setEventListeners(listenerList);
 		
 		return conf;
 	}

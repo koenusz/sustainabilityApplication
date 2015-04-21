@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 
 import nl.mycompany.webapp.ui.login.LoginView;
 
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.delegate.event.ActivitiEvent;
+import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,15 +21,18 @@ import com.github.peholmst.i18n4vaadin.simple.I18NProvidingUIStrategy;
 import com.github.peholmst.i18n4vaadin.simple.SimpleI18N;
 import com.github.peholmst.i18n4vaadin.util.I18NHolder;
 import com.github.peholmst.i18n4vaadin.util.I18NProvider;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -36,7 +42,8 @@ import com.vaadin.ui.themes.ValoTheme;
 @Theme("mytheme")
 @SpringUI
 @Widgetset("nl.mycompany.webapp.MyAppWidgetset")
-public class SustainabilityApplicationUI extends UI implements I18NProvider {
+@Push
+public class SustainabilityApplicationUI extends UI implements I18NProvider, ActivitiEventListener, DetachListener {
 	
 	 private static final Logger LOG = Logger
 	 .getLogger(SustainabilityApplicationUI.class);
@@ -51,6 +58,9 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider {
 	private String fragmentAndParameters;
 	
 	ResourceBundle i18nBundle;
+	
+	@Autowired
+	private RuntimeService runtimeService;
 	
 	@Messages({
 	@Message(key = "viewScopedView", value = "View Scoped View"),
@@ -117,7 +127,10 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider {
 
               }          
         });
-
+        //add the ui as listener to the activiti engine
+        this.runtimeService.addEventListener(this);
+        //add a detach listener for cleanup
+        addDetachListener(this);
 
     }
 	
@@ -163,5 +176,29 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider {
 	public I18N getI18N() {
 		return i18n;
 	}
+
+	@Override
+	public void onEvent(ActivitiEvent event) {
+		
+		LOG.debug("Recieved: " + event.getType());
+		access(() ->
+        Notification.show("EVENT: ", event.getType().toString(), Notification.Type.HUMANIZED_MESSAGE));
+		
+	}
+
+	@Override
+	public boolean isFailOnException() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+    public void detach(DetachEvent event) {
+		LOG.debug("detatching UI: " + this.getUIId());
+       //unregister the ui as listener on the activiti engine
+		runtimeService.removeEventListener(this);
+    }
+	
+	
 
 }

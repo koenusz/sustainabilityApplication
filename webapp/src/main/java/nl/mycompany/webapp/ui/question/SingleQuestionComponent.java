@@ -2,28 +2,26 @@ package nl.mycompany.webapp.ui.question;
 
 import javax.annotation.PostConstruct;
 
+import nl.mycompany.questionaire.domain.Question;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
-
-import nl.mycompany.questionaire.domain.Question;
-import nl.mycompany.webapp.ui.login.LoginViewComponent;
 
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.github.peholmst.i18n4vaadin.annotations.Messages;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Button.ClickEvent;
 
 @SuppressWarnings("serial")
 public class SingleQuestionComponent extends CustomComponent{
 	
 	SingleQuestionComponentBundle bundle = new SingleQuestionComponentBundle();
 	
+	@Autowired
 	QuestionairePresenter presenter;
 	
 	Question question;
@@ -37,18 +35,24 @@ public class SingleQuestionComponent extends CustomComponent{
 	private static final Logger LOG = Logger
 			.getLogger(SingleQuestionComponent.class);
 	
-	
+	public SingleQuestionComponent(Question question) {
+		this.question = question;
+	}
 	
 	@Messages({
-		@Message(key="questionId.caption", value ="question: {0}"),
-		@Message(key="questionStatus.caption", value ="Status is {0}"),
+		@Message(key="questionId.value", value ="question: {0}"),
+		@Message(key="questionStatus.value", value ="Status is {0}"),
 		@Message(key="start.caption", value ="Start")
 	})
-	public SingleQuestionComponent(Question question, QuestionairePresenter presenter) {
+	@PostConstruct
+		public void init()
+		{
 		
-		this.presenter = presenter;
+		LOG.debug("initializing singleQuestion Component");
+		LOG.debug("the presenter " + presenter.toString());
+		
+		
 		this.presenter.setCompenent(this);
-		this.question = question;
 		// A layout structure used for composition
 		Panel panel = new Panel();
 		HorizontalLayout layout = new HorizontalLayout();
@@ -60,7 +64,7 @@ public class SingleQuestionComponent extends CustomComponent{
 		startButton= new Button(bundle.start_caption(), this::startProcess);
 		
 		questionStatus = "pending";
-		statusLabel = new Label(bundle.questionStatus_caption(questionStatus) );
+		statusLabel = new Label(bundle.questionStatus_value(questionStatus) );
 		statusLabel.setSizeUndefined(); // Shrink
 		layout.addComponent(questionText);
 		layout.addComponent(startButton);
@@ -75,17 +79,19 @@ public class SingleQuestionComponent extends CustomComponent{
 	
 		private void startProcess(ClickEvent event)
 		{
-			
 			presenter.startAnswerQuestionProcess(question);
 		}
 		
 		public void updateQuestionComponent(String status)
 		{
-			statusLabel.setCaption(bundle.questionStatus_caption(status));
+			
+			statusLabel.setValue(bundle.questionStatus_value(status));
 			if(!status.equals("pending"))
 			{
 				startButton.setEnabled(false);
 			}
 		}
+		
+		 
 
 }

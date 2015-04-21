@@ -4,6 +4,7 @@ import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.questionaire.service.AnswerQuestionService;
 
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +22,9 @@ public class QuestionairePresenter {
 
 	@Autowired
 	AnswerQuestionService answerQuestionService;
+	
+	@Autowired
+	RuntimeService runtimeService;
 
 	
 	QuestionairePresenterBundle bundle = new QuestionairePresenterBundle();

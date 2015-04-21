@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.webapp.ui.question.QuestionairePresenter;
 import nl.mycompany.webapp.ui.question.SingleQuestionComponent;
+import nl.mycompany.webapp.ui.question.SingleQuestionComponentFactory;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -21,6 +22,9 @@ public class DefaultView extends VerticalLayout implements View {
 	@Autowired
 	QuestionairePresenter presenter;
 	
+	@Autowired
+	SingleQuestionComponentFactory componentFactory;
+	
 
     @PostConstruct
     void init() {
@@ -29,8 +33,15 @@ public class DefaultView extends VerticalLayout implements View {
     	//question.setId(120);
     	question.setQuestionText("Wie kan mij de weg naar Hamelen vertellen?");
     	question.setDomain("Domme vragen");
+    	
+    	Question question2 = new Question();
+    	//question.setId(120);
+    	question2.setQuestionText("Wie kan mij de weg naar Rotterdam vertellen?");
+    	question2.setDomain("Domme vragen");
+    	
+        addComponent(componentFactory.createSingleQuestionComponent(question));
+    	 addComponent(componentFactory.createSingleQuestionComponent(question2));
 
-        addComponent(new SingleQuestionComponent(question, presenter));
         
   
     }
