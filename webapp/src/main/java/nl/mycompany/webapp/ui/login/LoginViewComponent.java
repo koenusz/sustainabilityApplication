@@ -5,8 +5,9 @@ import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.peholmst.i18n4vaadin.annotations.Message;
+import com.github.peholmst.i18n4vaadin.annotations.Messages;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -27,9 +28,17 @@ public class LoginViewComponent extends Panel implements LoginView {
 	private TextField username;
 	private PasswordField password;
 	
+	LoginViewComponentBundle bundle = new LoginViewComponentBundle();
+	
 	@Autowired
 	LoginPresenter presenter;
 		
+	
+	@Messages({
+		@Message(key="username.caption", value ="Username"),
+		@Message(key="password.caption", value ="Password"),
+		@Message(key="login.caption", value ="Login")
+	})
 	@PostConstruct
     void init() {
 		
@@ -37,13 +46,14 @@ public class LoginViewComponent extends Panel implements LoginView {
 		presenter.setLoginView(this);
 		Layout layout = new VerticalLayout();
 
-		username = new TextField("Username");
+		
+		username = new TextField(bundle.username_caption());
 		layout.addComponent(username);
 
-		password = new PasswordField("Password");
+		password = new PasswordField(bundle.password_caption());
 		layout.addComponent(password);
 
-		final Button login = new Button("Login", this::login);
+		final Button login = new Button(bundle.login_caption(), this::login);
 		layout.addComponent(login);
 		setContent(layout);
     }
@@ -60,10 +70,15 @@ public class LoginViewComponent extends Panel implements LoginView {
 		// TODO Auto-generated method stub
 	}
 
+	
+	@Messages({
+		@Message(key="loginFailed.caption" , value = "Login failed."),
+		@Message(key="loginFailed.description" , value = "Please try again.")
+	})
 	@Override
 	public void showLoginFailed() {
-		Notification.show("Login failed.",
-                "Please try again.",
+		Notification.show(bundle.loginFailed_caption(),
+               bundle.loginFailed_description(),
                 Notification.Type.WARNING_MESSAGE);
 	}
 

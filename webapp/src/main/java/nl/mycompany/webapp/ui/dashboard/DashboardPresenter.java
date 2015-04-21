@@ -31,10 +31,13 @@ public class DashboardPresenter {
 	@Autowired
 	RepositoryService repositoryService;
 	
+	
+	
 	public void assignTaskToCurrentUser(String taskId)
 	{
 		taskService.claim(taskId, getLoggedInUser());
 	}
+	
 	
     /*public void assignTaskToCurrentUserAndComplete(String taskId) {
         assignTaskToCurrentUser(taskId);

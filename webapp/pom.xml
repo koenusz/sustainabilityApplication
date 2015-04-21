@@ -114,6 +114,16 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 		</dependency>
+		<!-- Implementation without CDI -->
+		<dependency>
+			<groupId>com.github.peholmst.i18n4vaadin</groupId>
+			<artifactId>i18n4vaadin-simple</artifactId>
+		</dependency>
+		<!-- Annotation processor -->
+		<dependency>
+			<groupId>com.github.peholmst.i18n4vaadin</groupId>
+			<artifactId>i18n4vaadin-simple-ap</artifactId>
+		</dependency>
 
 		<!-- Spring -->
 		<dependency>
@@ -309,6 +319,27 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				
+							<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/annotations/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+	
 			</plugins>
 		</pluginManagement>
 

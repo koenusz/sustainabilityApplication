@@ -2,12 +2,22 @@ package nl.mycompany.webapp;
 
 
 
-import nl.mycompany.webapp.ui.login.LoginPresenter;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import nl.mycompany.webapp.ui.login.LoginView;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.peholmst.i18n4vaadin.I18N;
+import com.github.peholmst.i18n4vaadin.annotations.Message;
+import com.github.peholmst.i18n4vaadin.annotations.Messages;
+import com.github.peholmst.i18n4vaadin.simple.I18NProvidingUIStrategy;
+import com.github.peholmst.i18n4vaadin.simple.SimpleI18N;
+import com.github.peholmst.i18n4vaadin.util.I18NHolder;
+import com.github.peholmst.i18n4vaadin.util.I18NProvider;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -26,7 +36,7 @@ import com.vaadin.ui.themes.ValoTheme;
 @Theme("mytheme")
 @SpringUI
 @Widgetset("nl.mycompany.webapp.MyAppWidgetset")
-public class SustainabilityApplicationUI extends UI {
+public class SustainabilityApplicationUI extends UI implements I18NProvider {
 	
 	 private static final Logger LOG = Logger
 	 .getLogger(SustainabilityApplicationUI.class);
@@ -40,6 +50,13 @@ public class SustainabilityApplicationUI extends UI {
 
 	private String fragmentAndParameters;
 	
+	ResourceBundle i18nBundle;
+	
+	@Messages({
+	@Message(key = "viewScopedView", value = "View Scoped View"),
+	@Message(key = "viewDefaultView", value = "View Default View"),
+	@Message(key = "viewLoginView", value = "View Login View")
+	})
 	@Override
     protected void init(VaadinRequest vaadinRequest) {
 		
@@ -51,11 +68,12 @@ public class SustainabilityApplicationUI extends UI {
 
         final CssLayout navigationBar = new CssLayout();
         navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-        navigationBar.addComponent(createNavigationButton("View Scoped View",
+      
+        navigationBar.addComponent(createNavigationButton(bundle.viewScopedView(),
                 ScopedView.VIEW_NAME));
-        navigationBar.addComponent(createNavigationButton("View default View",
+        navigationBar.addComponent(createNavigationButton(bundle.viewDefaultView(),
                 DefaultView.VIEW_NAME));
-        navigationBar.addComponent(createNavigationButton("View login View",
+        navigationBar.addComponent(createNavigationButton(bundle.viewLoginView(),
         		LoginView.VIEW_NAME));
         root.addComponent(navigationBar);
 
@@ -106,11 +124,11 @@ public class SustainabilityApplicationUI extends UI {
 	 private Button createNavigationButton(String caption, final String viewName) {
 	        Button button = new Button(caption);
 	        button.addStyleName(ValoTheme.BUTTON_SMALL);
-	        // If you didn't choose Java 8 when creating the project, convert this to an anonymous listener class
 	        button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
 	        return button;
 	    }
 
+	 
 	
 	public static SustainabilityApplicationUI getCurrent() {
 		return (SustainabilityApplicationUI)UI.getCurrent();
@@ -132,6 +150,18 @@ public class SustainabilityApplicationUI extends UI {
 	public void navigateTo(String viewName)
 	{
 		navigator.navigateTo(viewName);
+	}
+
+	private I18N i18n = new SimpleI18N(Arrays.asList(new Locale("en"), new Locale("nl")));
+	private SustainabilityApplicationUIBundle bundle = new SustainabilityApplicationUIBundle();
+
+    static {
+        I18NHolder.setStrategy(new I18NProvidingUIStrategy());
+    }
+	
+	@Override
+	public I18N getI18N() {
+		return i18n;
 	}
 
 }

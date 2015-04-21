@@ -135,9 +135,15 @@
 				<version>0.6.2</version>
 			</dependency>
 			<dependency>
-				<groupId>ru.xpoft.vaadin</groupId>
-				<artifactId>spring-vaadin-integration</artifactId>
-				<version>3.1</version>
+				<groupId>com.github.peholmst.i18n4vaadin</groupId>
+				<artifactId>i18n4vaadin-simple</artifactId>
+				<version>2.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.peholmst.i18n4vaadin</groupId>
+				<artifactId>i18n4vaadin-simple-ap</artifactId>
+				<version>2.0.0</version>
+				<scope>provided</scope>
 			</dependency>
 
 
@@ -318,6 +324,9 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<source>${project.source.version}</source>
 					<target>${project.target.version}</target>
+					<compilerArguments>
+						<Abundleperclass>true</Abundleperclass>
+					</compilerArguments>
 				</configuration>
 			</plugin>
 
@@ -330,40 +339,7 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>aspectj-maven-plugin</artifactId>
-				<version>1.7</version>
-				<configuration>
-					<aspectLibraries>
-						<aspectLibrary>
-							<groupId>org.springframework</groupId>
-							<artifactId>spring-aspects</artifactId>
-						</aspectLibrary>
-					</aspectLibraries>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<source>${project.source.version}</source>
-					<target>${project.target.version}</target>
-					<complianceLevel>${project.target.version}</complianceLevel>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjtools</artifactId>
-						<version>${aspectj.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
 		</plugins>
-
 	</build>
 
 	<repositories>
@@ -385,6 +361,10 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>peholmst-github-releases</id>
+			<url>https://github.com/peholmst/maven-repo/raw/master/releases</url>
 		</repository>
 	</repositories>
 </project>
