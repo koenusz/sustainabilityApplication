@@ -46,14 +46,8 @@ public class SingleQuestionComponent extends CustomComponent{
 	})
 	@PostConstruct
 		public void init()
-		{
-		
+		{	
 		LOG.debug("initializing singleQuestion Component");
-		LOG.debug("the presenter " + presenter.toString());
-		
-		
-		this.presenter.setCompenent(this);
-		// A layout structure used for composition
 		Panel panel = new Panel();
 		HorizontalLayout layout = new HorizontalLayout();
 		panel.setContent(layout);
@@ -82,7 +76,7 @@ public class SingleQuestionComponent extends CustomComponent{
 			presenter.startAnswerQuestionProcess(question);
 		}
 		
-		public void updateQuestionComponent(String status)
+		public void updateQuestionStatus(String status)
 		{
 			
 			statusLabel.setValue(bundle.questionStatus_value(status));
@@ -92,6 +86,10 @@ public class SingleQuestionComponent extends CustomComponent{
 			}
 		}
 		
+		public Long getQuestionId()
+		{
+			return question.getId();
+		}
 		 
 
 }

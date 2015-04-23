@@ -279,8 +279,8 @@
 				<version>${jetty.plugin.version}</version>
 				<configuration>
 					<scanIntervalSeconds>0</scanIntervalSeconds>
-					<jvmArgs>-Xdebug
-						-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n</jvmArgs>
+					<jettyXml>src/test/resources/jetty-jmx.xml</jettyXml>
+				<jvmArgs>-Dspring.liveBeansView.mbeanDomain</jvmArgs>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -319,27 +319,27 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-				
-							<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.9.1</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.build.directory}/generated-sources/annotations/</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-	
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.9.1</version>
+					<executions>
+						<execution>
+							<id>add-source</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>add-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<source>${project.build.directory}/generated-sources/annotations/</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 

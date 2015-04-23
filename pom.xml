@@ -241,7 +241,6 @@
 				<artifactId>aspectjrt</artifactId>
 				<version>${aspectj.version}</version>
 			</dependency>
-
 			<!-- Testing -->
 			<dependency>
 				<groupId>junit</groupId>

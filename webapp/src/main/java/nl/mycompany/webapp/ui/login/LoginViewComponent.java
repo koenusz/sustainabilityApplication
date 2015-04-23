@@ -2,6 +2,8 @@ package nl.mycompany.webapp.ui.login;
 
 import javax.annotation.PostConstruct;
 
+import nl.mycompany.webapp.abstracts.ViewEvent;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -87,6 +89,13 @@ public class LoginViewComponent extends Panel implements LoginView {
 		username.setValue("");
 		password.setValue("");
 
+	}
+
+
+	@Override
+	public void fireViewEvent(ViewEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

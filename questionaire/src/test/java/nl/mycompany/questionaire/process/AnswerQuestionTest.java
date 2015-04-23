@@ -153,7 +153,7 @@ public class AnswerQuestionTest {
 		  
 		  //claim the task
 		 
-		  Task theAnswerTask = taskService.createTaskQuery().taskCandidateGroup("clients").singleResult();
+		  Task theAnswerTask = taskService.createTaskQuery().processInstanceId(processInstance.getId()).taskCandidateGroup("clients").singleResult();
 		  
 		  taskService.claim(theAnswerTask.getId(), "testClient");
 		  
@@ -172,7 +172,7 @@ public class AnswerQuestionTest {
 	  
 	  @Test(expected=AccessDeniedException.class)
 	  @Deployment(resources="diagrams/AnswerQuestion.bpmn")
-	  public void unaothorizedAnswerQuestionTaskTest()
+	  public void unauthorizedAnswerQuestionTaskTest()
 	  {
 		  Question question = createQuestion();
 		  

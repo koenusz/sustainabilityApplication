@@ -4,7 +4,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 
 import nl.mycompany.questionaire.domain.Question;
 
-public interface AnswerQuestionService {
+public interface AnswerQuestionService extends AbstractService {
 	
 	public Question startQuestionProcess(Question question);
 
@@ -18,6 +18,6 @@ public interface AnswerQuestionService {
 	
 	public ProcessInstance getProcessInstanceForQuestion(Question question);
 
-	public void claimCurrentTaskByCurrentUser(String processInstanceId); 
+	
 	
 }

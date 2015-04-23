@@ -1,6 +1,7 @@
 package nl.mycompany.webapp.ui.login;
 
-import com.vaadin.navigator.View;
+import nl.mycompany.webapp.abstracts.View;
+
 
 
 public interface LoginView extends View {

@@ -1,6 +1,7 @@
 package nl.mycompany.webapp.ui.login;
 
 import nl.mycompany.webapp.SustainabilityApplicationUI;
+import nl.mycompany.webapp.abstracts.AbstractPresenter;
 
 import org.activiti.engine.IdentityService;
 import org.apache.log4j.Logger;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.spring.annotation.SpringComponent;
 
 @SpringComponent
-public class LoginPresenter  {
+public class LoginPresenter extends AbstractPresenter<LoginView>  {
 
 	private static final Logger LOG = Logger.getLogger(LoginPresenter.class);
 
