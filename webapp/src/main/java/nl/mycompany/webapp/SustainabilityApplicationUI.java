@@ -8,10 +8,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.annotation.PreDestroy;
+
+import nl.mycompany.questionaire.identity.AuthenticatedUser;
 import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
 import nl.mycompany.webapp.event.ActivitiEventSubscriber;
 import nl.mycompany.webapp.ui.login.LoginView;
-import nl.mycompany.webapp.ui.question.QuestionaireView;
+import nl.mycompany.webapp.ui.question.QuestionGenerator;
+import nl.mycompany.webapp.ui.question.QuestionPresenter;
+import nl.mycompany.webapp.ui.question.QuestionView;
+import nl.mycompany.webapp.ui.questionaire.QuestionaireView;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.delegate.event.ActivitiEvent;
@@ -57,7 +63,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	@Autowired
 	protected transient CurrentUserFactoryBean currentUserFactoryBean;
 
-	private String loggedInUser;
+	private AuthenticatedUser loggedInUser;
 
 	@Autowired
 	private SpringViewProvider viewProvider;
@@ -71,17 +77,30 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	@Autowired
 	private RuntimeService runtimeService;
 
+	// TODO testcode
+	@Autowired
+	QuestionPresenter presenter;
+
+	// TODO testcode
+	@Autowired
+	private transient QuestionGenerator generator;
+
 	private Map<ActivitiEventSubscriber, List<ActivitiEventType>> subscriberMap = new HashMap<>();
 
 	@Messages({
 			@Message(key = "viewScopedView", value = "View Scoped View"),
 			@Message(key = "viewDefaultView", value = "View Default View"),
 			@Message(key = "viewLoginView", value = "View Login View"),
-			@Message(key = "viewQuestionaireView", value = "View Questionaire View")
+			@Message(key = "viewQuestionaireView", value = "View Questionaire View"),
+			@Message(key = "viewQuestionView", value = "View Question View")
 
 	})
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
+
+		// TODO tesing code
+		generator.cleanUp();
+		generator.init();
 
 		final VerticalLayout root = new VerticalLayout();
 		root.setSizeFull();
@@ -100,6 +119,8 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 				bundle.viewLoginView(), LoginView.VIEW_NAME));
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewQuestionaireView(), QuestionaireView.VIEW_NAME));
+		navigationBar.addComponent(createNavigationButton(
+				bundle.viewQuestionView(), QuestionView.VIEW_NAME));
 		root.addComponent(navigationBar);
 
 		final Panel viewContainer = new Panel();
@@ -161,38 +182,25 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		return (SustainabilityApplicationUI) UI.getCurrent();
 	}
 
-	public String getLoggedInUser() {
+	public AuthenticatedUser getLoggedInUser() {
 		return loggedInUser;
 	}
 
-	public void setLoggedInUser(String loggedInUser) {
+	public void setLoggedInUser(AuthenticatedUser loggedInUser) {
 		this.loggedInUser = loggedInUser;
 	}
 
-	public static void engineLogin() {
+	public CurrentUserFactoryBean getCurrentUserFactoryBean() {
 
-		if (SustainabilityApplicationUI.getCurrent().loggedInUser != null) {
-			LOG.debug("logging into engine for user "
-					+ SustainabilityApplicationUI.getCurrent().loggedInUser);
-			SustainabilityApplicationUI.getCurrent().currentUserFactoryBean
-					.setCurrentUsername(SustainabilityApplicationUI
-							.getCurrent().loggedInUser);
-		}
-	}
-
-	public static void engineLogout() {
-
-		SustainabilityApplicationUI.getCurrent().currentUserFactoryBean
-				.setCurrentUsername(null);
-
+		return currentUserFactoryBean;
 	}
 
 	public void navigateToFragmentAndParameters() {
 		this.navigateTo(fragmentAndParameters);
 	}
 
-	public void navigateTo(String viewName) {
-		navigator.navigateTo(viewName);
+	public static void navigateTo(String viewName) {
+		getCurrent().navigator.navigateTo(viewName);
 	}
 
 	private I18N i18n = new SimpleI18N(Arrays.asList(new Locale("en"),
@@ -222,8 +230,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	}
 
 	private void notifySubscribers(ActivitiEvent event) {
-		
-	
+
 		for (ActivitiEventSubscriber sub : subscriberMap.keySet()) {
 			if (subscriberMap.get(sub).contains(event.getType())) {
 				LOG.debug("notifying: " + event.getType());
@@ -257,6 +264,12 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		// unregister the ui as listener on the activiti engine
 		runtimeService.removeEventListener(this);
 	}
-	// end
+	
+	@PreDestroy
+	public void tearDown() {
+
+		// TODO tesing code
+		generator.cleanUp();
+	}
 
 }

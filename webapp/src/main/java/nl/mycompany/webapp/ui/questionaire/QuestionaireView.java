@@ -1,4 +1,4 @@
-package nl.mycompany.webapp.ui.question;
+package nl.mycompany.webapp.ui.questionaire;
 
 import nl.mycompany.webapp.abstracts.View;
 

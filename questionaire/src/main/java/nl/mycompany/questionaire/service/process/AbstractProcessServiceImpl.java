@@ -1,4 +1,4 @@
-package nl.mycompany.questionaire.service;
+package nl.mycompany.questionaire.service.process;
 
 import javax.validation.Validator;
 
@@ -11,7 +11,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractServiceImpl {
+public abstract class AbstractProcessServiceImpl {
 
     @Autowired
     protected Validator validator;

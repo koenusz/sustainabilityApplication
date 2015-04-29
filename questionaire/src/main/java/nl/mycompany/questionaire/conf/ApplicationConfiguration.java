@@ -2,6 +2,7 @@ package nl.mycompany.questionaire.conf;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
@@ -15,6 +16,7 @@ import com.vaadin.spring.annotation.EnableVaadin;
 @EnableVaadin
 //to enable the aspect to be configured by spring
 @EnableSpringConfigured
+@EnableAspectJAutoProxy
 public class ApplicationConfiguration {
 	
 	

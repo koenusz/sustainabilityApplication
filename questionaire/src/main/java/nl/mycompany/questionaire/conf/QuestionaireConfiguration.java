@@ -1,12 +1,13 @@
 package nl.mycompany.questionaire.conf;
 
 import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
-import nl.mycompany.questionaire.identity.aspect.RequireGroupAspect;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @Configuration
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class QuestionaireConfiguration {
 
 	
@@ -15,6 +16,13 @@ public class QuestionaireConfiguration {
 	{
 		return new CurrentUserFactoryBean();
 	}
+	
+	/*@Bean
+	public RequireGroupAspect requireGroupAspect()
+	{
+		return Aspects.aspectOf(RequireGroupAspect.class);
+	}*/
+
 
 	
 	

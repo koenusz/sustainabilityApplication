@@ -192,6 +192,15 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -280,7 +289,8 @@
 				<configuration>
 					<scanIntervalSeconds>0</scanIntervalSeconds>
 					<jettyXml>src/test/resources/jetty-jmx.xml</jettyXml>
-				<jvmArgs>-Dspring.liveBeansView.mbeanDomain</jvmArgs>
+					<jvmArgs>-Dspring.liveBeansView.mbeanDomain -Xdebug
+						-agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n</jvmArgs>
 				</configuration>
 			</plugin>
 		</plugins>

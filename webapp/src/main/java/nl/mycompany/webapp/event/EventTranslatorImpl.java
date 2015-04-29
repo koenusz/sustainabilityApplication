@@ -1,7 +1,7 @@
 package nl.mycompany.webapp.event;
 
 import nl.mycompany.questionaire.domain.Question;
-import nl.mycompany.questionaire.service.AnswerQuestionService;
+import nl.mycompany.questionaire.service.process.AnswerQuestionService;
 import nl.mycompany.webapp.abstracts.View;
 
 import org.activiti.engine.TaskService;

@@ -1,4 +1,6 @@
-package nl.mycompany.webapp.ui.question;
+package nl.mycompany.webapp.ui.process.answerquestion;
+
+import nl.mycompany.webapp.ui.question.AnswerQuestionStatusBundle;
 
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 

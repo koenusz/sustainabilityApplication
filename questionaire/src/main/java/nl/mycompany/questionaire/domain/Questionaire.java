@@ -3,6 +3,7 @@ package nl.mycompany.questionaire.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ public class Questionaire {
 	@Id
 	private long id;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER , cascade=CascadeType.ALL)
 	@JoinTable(
 		      name="Questionaire_question",
 		      joinColumns={@JoinColumn(name="QUESTIONAIRE_ID", referencedColumnName="ID")},

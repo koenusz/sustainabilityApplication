@@ -119,7 +119,7 @@ public class DashboardPresenter {
 
     private String getLoggedInUser()
     {
-    	return SustainabilityApplicationUI.getCurrent().getLoggedInUser();
+    	return SustainabilityApplicationUI.getCurrent().getLoggedInUser().getName();
     }
    
 }

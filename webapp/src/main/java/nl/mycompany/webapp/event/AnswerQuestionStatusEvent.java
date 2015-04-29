@@ -3,7 +3,7 @@ package nl.mycompany.webapp.event;
 import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.webapp.abstracts.View;
 import nl.mycompany.webapp.abstracts.ViewEvent;
-import nl.mycompany.webapp.ui.question.AnswerQuestionStatusTranslator;
+import nl.mycompany.webapp.ui.process.answerquestion.AnswerQuestionStatusTranslator;
 
 
 public class AnswerQuestionStatusEvent extends ViewEvent {

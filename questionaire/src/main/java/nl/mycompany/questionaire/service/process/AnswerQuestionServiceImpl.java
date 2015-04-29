@@ -1,4 +1,4 @@
-package nl.mycompany.questionaire.service;
+package nl.mycompany.questionaire.service.process;
 
 import java.util.HashMap;
 
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class AnswerQuestionServiceImpl extends AbstractServiceImpl implements AnswerQuestionService{
+public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implements AnswerQuestionService{
 	
 	@Autowired
 	QuestionRepository questionRepository;

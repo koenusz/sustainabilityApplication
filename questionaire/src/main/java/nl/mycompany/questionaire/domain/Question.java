@@ -20,6 +20,8 @@ public class Question {
 	
 	private String domain;
 	
+	private String startRemark;
+	
 	private String auditResult;
 	
 	private String answer;
@@ -65,6 +67,14 @@ public class Question {
 
 	public void setAnswer(String answer) {
 		this.answer = answer;
+	}
+
+	public String getStartRemark() {
+		return startRemark;
+	}
+
+	public void setStartRemark(String startRemark) {
+		this.startRemark = startRemark;
 	}
 
 	public List<Questionaire> getQuestionaires() {

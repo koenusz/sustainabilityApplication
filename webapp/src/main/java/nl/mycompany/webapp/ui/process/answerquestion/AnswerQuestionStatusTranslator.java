@@ -1,4 +1,4 @@
-package nl.mycompany.webapp.ui.question;
+package nl.mycompany.webapp.ui.process.answerquestion;
 
 public class AnswerQuestionStatusTranslator implements AnswerQuestionStatus{
 	

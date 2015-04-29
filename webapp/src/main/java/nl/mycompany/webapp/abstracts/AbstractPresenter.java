@@ -1,9 +1,13 @@
 package nl.mycompany.webapp.abstracts;
 
+import com.vaadin.ui.Component;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Window;
 
 
 public abstract class AbstractPresenter<V extends View>  {
 	
+
 	private V view;
 	
 	/**
@@ -11,7 +15,6 @@ public abstract class AbstractPresenter<V extends View>  {
 	 * initialization code should go in the {@link #init()} method. When this
 	 * constructor is invoked, the view might not yet have been initialized.
 	 * 
-	 * @see AbstractView#createPresenter()
 	 * 
 	 * @param view
 	 *            the view that uses the presenter (must not be
@@ -52,6 +55,15 @@ public abstract class AbstractPresenter<V extends View>  {
 			throw new IllegalStateException("View has not been set yet");
 		}
 		return view;
+	}
+	
+	public void openSubWindow(String caption, Component component )
+	{
+        final Window sub = new Window(caption);
+        sub.setModal(true);
+        sub.center();
+        UI.getCurrent().addWindow(sub);
+        sub.setContent(component);
 	}
 	
 	/**

@@ -1,9 +1,16 @@
 package nl.mycompany.questionaire.identity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import nl.mycompany.questionaire.conf.ApplicationConfiguration;
 
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,5 +44,15 @@ public class IdentityTest {
 	{
 		//login one of the pre setup users
 		assertTrue(idService.checkPassword("client", "p"));
+	}
+	
+	@Test
+	public void groupTest()
+	{
+		//get the groups
+		List<Group> groups =  idService.createGroupQuery().list();
+		
+		assertTrue(groups.size() > 0);
+		
 	}
 }

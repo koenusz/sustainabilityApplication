@@ -1,7 +1,6 @@
-package nl.mycompany.webapp.ui.question;
+package nl.mycompany.webapp.ui.process.answerquestion;
 
 import nl.mycompany.questionaire.domain.Question;
-
 
 public interface SingleQuestionComponentFactory {
 

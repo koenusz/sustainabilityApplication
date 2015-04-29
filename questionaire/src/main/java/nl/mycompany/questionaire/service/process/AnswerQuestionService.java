@@ -1,10 +1,10 @@
-package nl.mycompany.questionaire.service;
+package nl.mycompany.questionaire.service.process;
 
 import org.activiti.engine.runtime.ProcessInstance;
 
 import nl.mycompany.questionaire.domain.Question;
 
-public interface AnswerQuestionService extends AbstractService {
+public interface AnswerQuestionService extends AbstractProcessService {
 	
 	public Question startQuestionProcess(Question question);
 
