@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.github.peholmst.i18n4vaadin.annotations.Messages;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -48,6 +49,8 @@ public class QuestionViewComponent extends Panel implements QuestionView{
 	
 	View previousView;
 	
+	FieldGroup binder;
+	
 	
 	
 	@Messages({
@@ -57,6 +60,7 @@ public class QuestionViewComponent extends Panel implements QuestionView{
 	})
 	@PostConstruct
     void init() {
+		presenter.init();
 		
 		LOG.debug("init loginviewcomponent");
 		presenter.setView(this);
@@ -64,13 +68,9 @@ public class QuestionViewComponent extends Panel implements QuestionView{
 		
 		
 		questionId = new TextField();
-		//questionId.setValue("" + presenter.getQuestion().getId());
-		//questionId.setEnabled(editable);
 		layout.addComponent(questionId);
 		
 		area = new TextArea();
-		//area.setValue(presenter.getQuestion().getQuestionText());
-		//area.setEnabled(editable);
 		layout.addComponent(area);
 		
 		HorizontalLayout buttonBar = new HorizontalLayout();
@@ -83,8 +83,9 @@ public class QuestionViewComponent extends Panel implements QuestionView{
 		layout.setEnabled(editable);
 		
 		//data binding
+		
 		BeanItem<Question> item = new BeanItem<>(presenter.getQuestion());
-		FieldGroup binder = new FieldGroup(item);
+		binder = new FieldGroup(item);
 		binder.bind(questionId, "id");
 		binder.bind(area, "questionText");
 		
@@ -96,6 +97,11 @@ public class QuestionViewComponent extends Panel implements QuestionView{
 
 	private void save(ClickEvent event)
 	{
+		try {
+			binder.commit();
+		} catch (CommitException e) {
+			e.printStackTrace();
+		}
 		presenter.save();
 		SustainabilityApplicationUI.navigateTo("");
 	}

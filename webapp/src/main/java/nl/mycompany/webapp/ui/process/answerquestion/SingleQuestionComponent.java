@@ -3,8 +3,6 @@ package nl.mycompany.webapp.ui.process.answerquestion;
 import javax.annotation.PostConstruct;
 
 import nl.mycompany.questionaire.domain.Question;
-import nl.mycompany.webapp.SustainabilityApplicationUI;
-import nl.mycompany.webapp.ui.question.SingleQuestionComponentBundle;
 import nl.mycompany.webapp.ui.questionaire.QuestionairePresenter;
 
 import org.apache.log4j.Logger;
@@ -40,7 +38,7 @@ public class SingleQuestionComponent extends CustomComponent {
 	}
 
 	@Messages({ @Message(key = "questionId.value", value = "question: {0}"),
-			@Message(key = "questionStatus.value", value = "Status is {0}"),
+			@Message(key = "questionStatus.value", value = "Status is: {0}"),
 			@Message(key = "start.caption", value = "Start") })
 	@PostConstruct
 	public void init() {

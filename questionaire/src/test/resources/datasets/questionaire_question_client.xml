@@ -1,8 +1,13 @@
 <dataset>
-    <question id="1" questionText="Lorem ipsum" domain="Foo" />
-    <question id="2" questionText="Lorem ipsum" domain="Bar" />
+    <question id="1" questionText="questionaire 1 test" domain="Foo" />
+    <question id="2" questionText="questionaire 1 test" domain="Bar" />
+	<question id="3" questionText="no questionaire attached" domain="Bar" />
+	<question id="4" questionText="questionaire 2 test" domain="Bar" />
 	<client name="companyA" />
+	<client name="companyB" />
     <questionaire id="1"  name="testQuestionaire" client_name="companyA" creationdate="[NOW]"/>
+    <questionaire id="2"  name="testQuestionaire" client_name="companyB" creationdate="[NOW]"/>
     <questionaire_question questionaire_id="1" question_id="1"/>
     <questionaire_question questionaire_id="1" question_id="2"/>
+    <questionaire_question questionaire_id="2" question_id="4"/>
 </dataset>

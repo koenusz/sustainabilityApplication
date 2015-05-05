@@ -114,6 +114,11 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vaadin.addon</groupId>
+			<artifactId>jpacontainer</artifactId>
+		</dependency>
+
 		<!-- Implementation without CDI -->
 		<dependency>
 			<groupId>com.github.peholmst.i18n4vaadin</groupId>
@@ -287,7 +292,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.plugin.version}</version>
 				<configuration>
-					<scanIntervalSeconds>0</scanIntervalSeconds>
+					<scanIntervalSeconds>2</scanIntervalSeconds>
 					<jettyXml>src/test/resources/jetty-jmx.xml</jettyXml>
 					<jvmArgs>-Dspring.liveBeansView.mbeanDomain -Xdebug
 						-agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n</jvmArgs>

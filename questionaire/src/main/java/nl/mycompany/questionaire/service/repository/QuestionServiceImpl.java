@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import nl.mycompany.questionaire.domain.Question;
+import nl.mycompany.questionaire.domain.Questionaire;
 import nl.mycompany.questionaire.repository.QuestionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class QuestionServiceImpl implements QuestionService{
 	@Override
 	public List<Question> findAllQuestions() {
 		return questionRepository.findAll();
+	}
+
+	@Override
+	public List<Question> findNotInQuestionaire(Questionaire questionaire) {
+		return questionRepository.findNotInQuestionaire(questionaire);
 	}
 
 }

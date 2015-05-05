@@ -5,15 +5,18 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Client {
 
-	@Id
+	@Id 
+	@NotNull
 	String name;
 	
 	@OneToMany
 	List<Questionaire> questionaires;
+	
 	
 	public String getName() {
 		return name;

@@ -7,6 +7,7 @@ import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.questionaire.identity.Groups;
 import nl.mycompany.questionaire.identity.RequireGroup;
 import nl.mycompany.questionaire.repository.QuestionRepository;
+import nl.mycompany.questionaire.service.repository.QuestionService;
 
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implements AnswerQuestionService{
 	
 	@Autowired
-	QuestionRepository questionRepository;
+	QuestionService service;
 	
     @Override
     @Transactional
@@ -30,7 +31,7 @@ public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implem
     	//TODO: authorization
         //question.setRequesterUserId(Authentication.getAuthenticatedUserId());
         //question.setRequesterUserName(getFullNameOfUser(question.getRequesterUserId()));
-        question = questionRepository.save(question);
+        question = service.saveQuestion(question);
         String businessKey = Long.toString(question.getId());
         
         // Also set the request as process-variable
@@ -46,7 +47,7 @@ public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implem
 	@RequireGroup(Groups.GROUP_CLIENTS)
 	public void answerQuestion(Question question, String answer) {
 		question.setAnswer(answer);
-		questionRepository.save(question);
+		service.saveQuestion(question);
 		 final ProcessInstance processInstance = getProcessInstanceForQuestion(question);
 	     final Task answerQuestionTask = findTaskByDefinitionKey(processInstance, "answerQuestionTask");
 	        taskService.complete(answerQuestionTask.getId());
@@ -59,7 +60,7 @@ public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implem
 	public void auditQuestion(Question question, String result) {
 		
 		question.setAuditResult(result);
-		questionRepository.save(question);
+		service.saveQuestion(question);
 		 final ProcessInstance processInstance = getProcessInstanceForQuestion(question);
 	     final Task auditQuestionTask = findTaskByDefinitionKey(processInstance, "auditQuestionTask");
 	     runtimeService.setVariable(processInstance.getProcessInstanceId(), "question", question);
@@ -79,7 +80,7 @@ public class AnswerQuestionServiceImpl extends AbstractProcessServiceImpl implem
 	@Override
 	public Question findQuestionById(Long id) {
 		
-		return questionRepository.findOne(id).get();
+		return service.findQuestion(id).get();
 	}
 	
     public ProcessInstance getProcessInstanceForQuestion(Question question) {

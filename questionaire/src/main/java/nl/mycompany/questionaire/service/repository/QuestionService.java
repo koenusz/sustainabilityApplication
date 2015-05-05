@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import nl.mycompany.questionaire.domain.Question;
+import nl.mycompany.questionaire.domain.Questionaire;
 
 public interface QuestionService {
 	
@@ -14,5 +15,7 @@ public interface QuestionService {
 	public List<Question> findAllQuestions();
 	
 	public void deleteQuestion(Long id);
+	
+	public List<Question> findNotInQuestionaire(Questionaire questionaire);
 
 }

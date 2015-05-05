@@ -106,7 +106,7 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 			e.printStackTrace();
 		}
 		return answerQuestionService.getProcessInstanceForQuestion(question) != null ? answerQuestionService
-				.getProcessInstanceForQuestion(question).getActivityId() : null;
+				.getProcessInstanceForQuestion(question).getActivityId() : "new";
 	}
 
 	private Question findQuestionByComponent(SingleQuestionComponent component)

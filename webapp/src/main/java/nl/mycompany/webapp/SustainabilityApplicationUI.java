@@ -1,6 +1,5 @@
 package nl.mycompany.webapp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +12,14 @@ import javax.annotation.PreDestroy;
 import nl.mycompany.questionaire.identity.AuthenticatedUser;
 import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
 import nl.mycompany.webapp.event.ActivitiEventSubscriber;
+import nl.mycompany.webapp.ui.client.ClientView;
 import nl.mycompany.webapp.ui.login.LoginView;
 import nl.mycompany.webapp.ui.question.QuestionGenerator;
 import nl.mycompany.webapp.ui.question.QuestionPresenter;
 import nl.mycompany.webapp.ui.question.QuestionView;
 import nl.mycompany.webapp.ui.questionaire.QuestionaireView;
+import nl.mycompany.webapp.ui.questionairebuilder.QuestionaireBuilderView;
+import nl.mycompany.webapp.ui.user.UserView;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.delegate.event.ActivitiEvent;
@@ -92,7 +94,10 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 			@Message(key = "viewDefaultView", value = "View Default View"),
 			@Message(key = "viewLoginView", value = "View Login View"),
 			@Message(key = "viewQuestionaireView", value = "View Questionaire View"),
-			@Message(key = "viewQuestionView", value = "View Question View")
+			@Message(key = "viewQuestionaireBuilderView", value = "View QuestionaireBuilder View"),
+			@Message(key = "viewClientView", value = "View Client View"),
+			@Message(key = "viewQuestionView", value = "View Question View"),
+			@Message(key = "viewUserView", value = "View User View")
 
 	})
 	@Override
@@ -121,6 +126,13 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 				bundle.viewQuestionaireView(), QuestionaireView.VIEW_NAME));
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewQuestionView(), QuestionView.VIEW_NAME));
+		navigationBar.addComponent(createNavigationButton(
+				bundle.viewQuestionaireBuilderView(), QuestionaireBuilderView.VIEW_NAME));
+		navigationBar.addComponent(createNavigationButton(
+				bundle.viewClientView(), ClientView.VIEW_NAME));
+		navigationBar.addComponent(createNavigationButton(
+				bundle.viewUserView(), UserView.VIEW_NAME));
+		
 		root.addComponent(navigationBar);
 
 		final Panel viewContainer = new Panel();
@@ -169,6 +181,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		addDetachListener(this);
 
 	}
+	
 
 	private Button createNavigationButton(String caption, final String viewName) {
 		Button button = new Button(caption);
@@ -264,12 +277,4 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		// unregister the ui as listener on the activiti engine
 		runtimeService.removeEventListener(this);
 	}
-	
-	@PreDestroy
-	public void tearDown() {
-
-		// TODO tesing code
-		generator.cleanUp();
-	}
-
 }

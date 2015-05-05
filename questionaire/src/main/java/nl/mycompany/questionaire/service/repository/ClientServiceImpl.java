@@ -7,7 +7,9 @@ import nl.mycompany.questionaire.domain.Client;
 import nl.mycompany.questionaire.repository.ClientRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ClientServiceImpl implements ClientService{
 	
 	@Autowired 

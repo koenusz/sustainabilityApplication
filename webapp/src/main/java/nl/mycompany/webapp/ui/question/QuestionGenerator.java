@@ -35,6 +35,9 @@ public class QuestionGenerator {
 	{
 		LOG.debug("init");
 		//tesing code
+		
+				generateAndSave(2, "tompoes");
+				generateAndSave(2, "pannekoek");
 				List<Question> panList = generate(2, "pannekoek");
 				List<Question> flapList = generate(2, "appelflap");
 				flapList.addAll(panList);

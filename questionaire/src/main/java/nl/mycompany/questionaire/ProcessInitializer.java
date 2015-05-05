@@ -1,9 +1,13 @@
 package nl.mycompany.questionaire;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import nl.mycompany.questionaire.domain.Client;
 import nl.mycompany.questionaire.identity.Groups;
+import nl.mycompany.questionaire.repository.ClientRepository;
 
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
@@ -20,6 +24,9 @@ public class ProcessInitializer implements Groups {
 	private IdentityService identityService;
 	@Autowired
 	private RepositoryService repositoryService;
+	
+	@Autowired
+	private ClientRepository clientRepo;
 
 	 private static final Logger LOG = Logger
 	 .getLogger(ProcessInitializer.class);
@@ -27,6 +34,7 @@ public class ProcessInitializer implements Groups {
 	@PostConstruct
 	public void setUp() {
 		setUpGroups();
+		setUpClients();
 		setUpUsers();
 		deployProcess();
 		
@@ -50,6 +58,8 @@ public class ProcessInitializer implements Groups {
 		addUser("manager", "Mike", "Manager", "mike@foobar.net", new String[] {GROUP_MANAGERS});
 		addUser("auditor", "Steven", "Secretary", "steven@foobar.net",
 				new String[] {GROUP_AUDITORS});
+		addUser("admin", "Heman", "Master of the Universe", "heman@masters.net",
+				new String[] {GROUP_ADMINS});
 
 	}
 
@@ -74,6 +84,15 @@ public class ProcessInitializer implements Groups {
 			}}
 		}
 	}
+	
+	private void setUpClients()
+	{
+		List<Client> clients = clientRepo.findAll();
+		for(Client client : clients)
+		{
+		addGroup(client.getName(), client.getName());
+		}
+	}
 
 	private boolean userExists(String username) {
 		return identityService.createUserQuery().userId(username)
@@ -85,8 +104,11 @@ public class ProcessInitializer implements Groups {
 		addGroup(GROUP_CLIENTS, "Clients");
 		addGroup(GROUP_AUDITORS, "Auditors");
 		addGroup(GROUP_MANAGERS, "Managers");
-		addGroup("companyA", "CompanyA");
-		addGroup(GROUP_ADMINS, "Administrator");
+		addGroup(GROUP_ADMINS, "Administrators");
+		addGroup(GROUP_CLIENTADMIN, "ClientAdministrators");
+		addGroup(GROUP_EMPLOYEE, "Employees");
+		
+		
 	}
 
 	private void addGroup(String groupId, String name) {
