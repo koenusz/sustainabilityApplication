@@ -42,9 +42,11 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 	@Autowired
 	private ClientPresenter clientPresenter;
 
-	PopupView changeClientpopup;
+	private PopupView changeClientpopup;
 
-	PopupView userPopup;
+	private PopupView userPopup;
+
+	private PopupView addGroupPopup;
 
 	// components
 	Label clientNameLabel;
@@ -153,8 +155,9 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 					Alignment.BOTTOM_CENTER);
 
 			HorizontalLayout groupAdminPanel = new HorizontalLayout();
-			Button addGroupButton = new Button(bundle.add(bundle.group()));
-			Button removeGroupButton = new Button(bundle.remove(bundle.group()), this::deleteMembership);
+			Button addGroupButton = new Button(bundle.add(bundle.group()), this::addMembership);
+			Button removeGroupButton = new Button(
+					bundle.remove(bundle.group()), this::deleteMembership);
 			groupAdminPanel.addComponent(addGroupButton);
 			groupAdminPanel.addComponent(removeGroupButton);
 			groupPanel.addComponent(groupAdminPanel);
@@ -180,22 +183,20 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 		} else {
 			presenter.deleteMembership(user, group);
 		}
-		setGroups(presenter
-				.findGroupsByUser((User) userList.getValue()));
-		
+		setGroups(presenter.findGroupsByUser((User) userList.getValue()));
+
 	}
 
-	private void addMembership(String groupId) {
+	private void addMembership(ClickEvent event) {
 		User user = (User) userList.getValue();
 
 		if (user == null) {
 			Notification.show(bundle.message_noselecteduser(),
 					Notification.Type.WARNING_MESSAGE);
-		} else if (groupId == null) {
-			Notification.show(bundle.message_noselectedgroup(),
-					Notification.Type.WARNING_MESSAGE);
 		} else {
-			presenter.createMembership(user, groupId);
+			addGroupPopup = new PopupView(null, new AddGroupPopup(presenter,
+					user));
+			addGroupPopup.setPopupVisible(true);
 		}
 
 	}
@@ -248,7 +249,6 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 		userPopup = new PopupView(null, new UserPopup(user, presenter));
 		this.addComponent(userPopup);
 		userPopup.setPopupVisible(true);
-		
 
 	}
 
