@@ -18,7 +18,6 @@ import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.spring.annotation.SpringComponent;

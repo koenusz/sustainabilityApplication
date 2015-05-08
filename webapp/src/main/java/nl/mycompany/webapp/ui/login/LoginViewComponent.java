@@ -99,6 +99,4 @@ public class LoginViewComponent extends Panel implements LoginView {
 	}
 
 
-
-
 }

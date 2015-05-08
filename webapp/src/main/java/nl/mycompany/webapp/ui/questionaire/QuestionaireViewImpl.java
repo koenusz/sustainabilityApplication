@@ -1,23 +1,27 @@
 package nl.mycompany.webapp.ui.questionaire;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.questionaire.domain.Questionaire;
+import nl.mycompany.webapp.SustainabilityApplicationUI;
 import nl.mycompany.webapp.abstracts.ViewEvent;
 import nl.mycompany.webapp.event.AnswerQuestionStatusEvent;
 import nl.mycompany.webapp.exception.ComponentNotFoundException;
 import nl.mycompany.webapp.ui.process.answerquestion.SingleQuestionComponentFactory;
+import nl.mycompany.webapp.ui.user.UserView;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
@@ -35,11 +39,13 @@ public class QuestionaireViewImpl extends VerticalLayout implements
 
 	@Autowired
 	private transient SingleQuestionComponentFactory componentFactory;
-
+	
+	QuestionaireViewImplBundle bundle = new QuestionaireViewImplBundle();
 
 	private TabSheet tabSheet;
 
 	@PostConstruct
+	@Message(key = "message", value = "No client found for user {0}")
 	void init() {
 		questionairePresenter.setView(this);
 
@@ -48,6 +54,20 @@ public class QuestionaireViewImpl extends VerticalLayout implements
 		layout.addComponent(tabSheet);
 
 		Questionaire questionaire = questionairePresenter.getQuestionaire();
+
+		if (questionaire == null) {
+			Notification.show(bundle.message(SustainabilityApplicationUI.getCurrent().getLoggedInUser().getName()), Notification.Type.WARNING_MESSAGE);
+			//TODO likely due to https://dev.vaadin.com/ticket/17477. fix in vaadin 7.4.5
+			try{
+			SustainabilityApplicationUI.navigateTo(UserView.VIEW_NAME);
+			} catch (ConcurrentModificationException e)
+			{
+				//do nothing, the functionality is correct.
+				//TODO remove this try catch on update to vaadin 7.4.5
+				//maybe the code needs to change using a viewchangelistener.
+			}
+			return;
+		}
 
 		for (Question question : questionaire.getQuestions()) {
 			this.addQuestion(question);
@@ -106,4 +126,5 @@ public class QuestionaireViewImpl extends VerticalLayout implements
 		}
 
 	}
+
 }

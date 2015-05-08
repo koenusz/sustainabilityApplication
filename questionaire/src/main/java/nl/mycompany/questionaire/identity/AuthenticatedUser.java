@@ -26,6 +26,10 @@ public class AuthenticatedUser {
 	public Client getClient() {
 		return client;
 	}
+	
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
 	public boolean isClientAdmin() {
 		return isClientAdmin;

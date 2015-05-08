@@ -11,6 +11,7 @@ import javax.annotation.PreDestroy;
 
 import nl.mycompany.questionaire.identity.AuthenticatedUser;
 import nl.mycompany.questionaire.identity.CurrentUserFactoryBean;
+import nl.mycompany.webapp.abstracts.View;
 import nl.mycompany.webapp.event.ActivitiEventSubscriber;
 import nl.mycompany.webapp.ui.client.ClientView;
 import nl.mycompany.webapp.ui.login.LoginView;
@@ -209,9 +210,8 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	}
 
 	public void navigateToFragmentAndParameters() {
-		this.navigateTo(fragmentAndParameters);
+		SustainabilityApplicationUI.navigateTo(fragmentAndParameters);
 	}
-
 	public static void navigateTo(String viewName) {
 		getCurrent().navigator.navigateTo(viewName);
 	}

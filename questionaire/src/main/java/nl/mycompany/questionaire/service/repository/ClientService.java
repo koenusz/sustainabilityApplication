@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import nl.mycompany.questionaire.domain.Client;
+import nl.mycompany.questionaire.exception.NoClientException;
+
+import org.activiti.engine.identity.User;
 
 public interface ClientService {
 	
@@ -14,5 +17,9 @@ public interface ClientService {
 	public List<Client> findAllClients();
 	
 	public void deleteClient(String name);
+	
+	public List<User> findUsersByClient(Client client);
+	
+	public Client findClientByUserName(String username) throws NoClientException;
 
 }

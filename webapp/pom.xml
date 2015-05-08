@@ -115,8 +115,8 @@
 			<artifactId>vaadin-themes</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.vaadin.addon</groupId>
-			<artifactId>jpacontainer</artifactId>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>collectioncontainer</artifactId>
 		</dependency>
 
 		<!-- Implementation without CDI -->

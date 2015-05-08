@@ -1,13 +1,12 @@
 package nl.mycompany.webapp.ui.login;
 
 import java.util.List;
-import java.util.Optional;
 
 import nl.mycompany.questionaire.domain.Client;
 import nl.mycompany.questionaire.exception.NoClientException;
 import nl.mycompany.questionaire.identity.AuthenticatedUser;
 import nl.mycompany.questionaire.identity.Groups;
-import nl.mycompany.questionaire.repository.ClientRepository;
+import nl.mycompany.questionaire.service.repository.ClientService;
 import nl.mycompany.webapp.SustainabilityApplicationUI;
 import nl.mycompany.webapp.abstracts.AbstractPresenter;
 
@@ -27,7 +26,7 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
 	protected transient IdentityService identityService;
 
 	@Autowired
-	private transient ClientRepository clientRepo;
+	private transient ClientService clientService;
 
 	private transient LoginView loginView;
 
@@ -42,7 +41,7 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
 			loginView.clearForm();
 			Client client = null;
 			try {
-				client = retrieveClient(username);
+				client = clientService.findClientByUserName(username);
 			} catch (NoClientException e) {
 				LOG.debug("login failed");
 				e.printStackTrace();
@@ -78,24 +77,6 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
 		}
 	}
 
-	private Client retrieveClient(String username) throws NoClientException {
-		List<Group> membership = identityService.createGroupQuery()
-				.groupMember(username).list();
-
-		for (Group group : membership) {
-			Optional<Client> client = clientRepo.findOne(group.getId());
-			if (client.isPresent()) {
-				return client.get();
-			}
-			// only admins are allowed to enter the application with access to
-			// multiple clients.
-			if (Groups.GROUP_ADMINS.equals(group.getId())) {
-				return new Client();
-			}
-
-		}
-
-		throw new NoClientException(username);
-	}
+	
 
 }

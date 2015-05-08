@@ -60,5 +60,4 @@ public class NewAnswerQuestionProcessFormImpl extends FormLayout implements NewA
 		// nothing happends
 		
 	}
-
 }

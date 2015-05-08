@@ -1,5 +1,7 @@
 package nl.mycompany.webapp.abstracts;
 
+import nl.mycompany.webapp.SustainabilityApplicationUI;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
@@ -7,8 +9,10 @@ import com.vaadin.ui.Window;
 
 public abstract class AbstractPresenter<V extends View>  {
 	
-
+	
 	private V view;
+	
+	private String previousView;
 	
 	/**
 	 * Creates a new <code>AbstractPresenter</code> for the specified view. Any
@@ -57,6 +61,22 @@ public abstract class AbstractPresenter<V extends View>  {
 		return view;
 	}
 	
+	public void navigateBack()
+	{
+		if (previousView == null) {
+			throw new IllegalStateException("PreviousView has not been set yet");
+		}
+		SustainabilityApplicationUI.navigateTo(previousView);
+	}
+	
+	public String getPreviousView() {
+		return previousView;
+	}
+
+	public void setPreviousView(String previousView) {
+		this.previousView = previousView;
+	}
+
 	public void openSubWindow(String caption, Component component )
 	{
         final Window sub = new Window(caption);
@@ -75,6 +95,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	 */
 	public void fireViewEvent(ViewEvent event) {
 		getView().fireViewEvent(event);
+				
 	}
 
 	/**
@@ -87,5 +108,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	public void init() {
 		// NOP
 	}
+	
+	
 
 }

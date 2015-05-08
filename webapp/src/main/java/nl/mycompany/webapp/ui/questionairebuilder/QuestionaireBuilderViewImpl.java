@@ -1,6 +1,5 @@
 package nl.mycompany.webapp.ui.questionairebuilder;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,17 +22,13 @@ import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.And;
 import com.vaadin.event.dd.acceptcriteria.ClientSideCriterion;
-import com.vaadin.event.dd.acceptcriteria.Not;
-import com.vaadin.event.dd.acceptcriteria.Or;
 import com.vaadin.event.dd.acceptcriteria.SourceIs;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
 import com.vaadin.ui.AbstractSelect.AcceptItem;
-import com.vaadin.ui.AbstractSelect.VerticalLocationIs;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.TableDragMode;
 import com.vaadin.ui.Tree;
