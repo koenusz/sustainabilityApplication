@@ -12,7 +12,6 @@ import nl.mycompany.questionaire.service.repository.QuestionaireService;
 import nl.mycompany.webapp.abstracts.AbstractPresenter;
 import nl.mycompany.webapp.abstracts.ViewEvent;
 import nl.mycompany.webapp.event.ActivitiEventSubscriber;
-import nl.mycompany.webapp.ui.question.QuestionairePresenterBundle;
 
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.apache.log4j.Logger;
@@ -39,8 +38,6 @@ public class QuestionaireBuilderPresenter extends
 	private QuestionService questionService;
 
 	private Questionaire questionaire;
-
-	QuestionairePresenterBundle bundle = new QuestionairePresenterBundle();
 
 	public static final String NAME = "name";
 

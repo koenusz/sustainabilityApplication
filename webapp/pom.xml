@@ -213,13 +213,82 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.3</version>
 				<configuration>
 					<encoding>${project.encoding}</encoding>
 					<source>${project.source.version}</source>
 					<target>${project.target.version}</target>
+					<compilerArgument>-proc:none</compilerArgument>
+
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.2.4</version>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}/generated-sources/annotations/</outputDirectory>
+							<processors>
+								<processors>com.github.peholmst.i18n4vaadin.simple.ap.SimpleAnnotationProcessor</processors>
+							</processors>
+							<options>
+								<bundleperclass>true</bundleperclass>
+							</options>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<classpathScope>compile</classpathScope>
+							<mainClass>com.vaadin.sass.SassCompiler</mainClass>
+							<arguments>
+								<argument>src/main/webapp/VAADIN/themes/mytheme/styles.scss</argument>
+								<argument>src/main/webapp/VAADIN/themes/mytheme/styles.css</argument>
+
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/annotations/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -292,12 +361,27 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.plugin.version}</version>
 				<configuration>
-					<scanIntervalSeconds>2</scanIntervalSeconds>
+					
 					<jettyXml>src/test/resources/jetty-jmx.xml</jettyXml>
 					<jvmArgs>-Dspring.liveBeansView.mbeanDomain -Xdebug
 						-agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n</jvmArgs>
+					
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<update>true</update>
+					<path>/${project.build.finalName}</path>  
+					<url>http://localhost:8080/manager/text</url>
+					<username>tomcat</username>
+					<password>tomcat</password>
+
+				</configuration>
+			</plugin>
+
 		</plugins>
 
 		<pluginManagement>
@@ -330,30 +414,50 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											apt-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0-alpha-5,)
+										</versionRange>
+										<goals>
+											<goal>process</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											exec-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.2.1,)
+										</versionRange>
+										<goals>
+											<goal>java</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.9.1</version>
-					<executions>
-						<execution>
-							<id>add-source</id>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<source>${project.build.directory}/generated-sources/annotations/</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+
 
 			</plugins>
 		</pluginManagement>

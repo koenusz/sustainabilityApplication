@@ -9,9 +9,11 @@ import nl.mycompany.webapp.abstracts.ViewEvent;
 import nl.mycompany.webapp.event.ClientChangedEvent;
 import nl.mycompany.webapp.ui.client.ClientPresenter;
 import nl.mycompany.webapp.ui.client.ClientView;
+import nl.mycompany.webapp.ui.question.QuestionPresenter;
 
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.peholmst.i18n4vaadin.annotations.Message;
@@ -35,6 +37,9 @@ import com.vaadin.ui.VerticalLayout;
 public class UserViewComponent extends VerticalLayout implements UserView {
 
 	public UserViewComponentBundle bundle = new UserViewComponentBundle();
+	
+	private static final Logger LOG = Logger
+			.getLogger(UserViewComponent.class);
 
 	@Autowired
 	private UserPresenter presenter;
@@ -124,6 +129,8 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 			// first the popups
 			changeClientpopup = new PopupView(null, new ChangeClientPopup(
 					clientPresenter));
+			changeClientpopup.setHideOnMouseOut(false);
+			
 			this.addComponent(changeClientpopup);
 
 			// the admin panel for the client
@@ -189,13 +196,15 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 
 	private void addMembership(ClickEvent event) {
 		User user = (User) userList.getValue();
-
+		LOG.debug("adding member");
 		if (user == null) {
 			Notification.show(bundle.message_noselecteduser(),
 					Notification.Type.WARNING_MESSAGE);
 		} else {
+			LOG.debug("adding member PopUp");
 			addGroupPopup = new PopupView(null, new AddGroupPopup(presenter,
 					user));
+			this.addComponent(addGroupPopup);
 			addGroupPopup.setPopupVisible(true);
 		}
 
@@ -203,6 +212,8 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 
 	@Message(key = "message.userdeleted", value = "User {0} is deleted.")
 	private void deleteUser(ClickEvent event) {
+		
+
 		if (userList.getValue() == null) {
 			Notification.show(bundle.message_noselecteduser(),
 					Notification.Type.WARNING_MESSAGE);

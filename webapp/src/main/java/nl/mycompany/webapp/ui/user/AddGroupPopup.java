@@ -11,6 +11,7 @@ import com.github.peholmst.i18n4vaadin.annotations.Messages;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.VerticalLayout;
@@ -30,6 +31,7 @@ public class AddGroupPopup extends VerticalLayout implements View {
 	public AddGroupPopup(UserPresenter presenter, User user) {
 		super();
 		this.presenter = presenter;
+		this.user = user;
 		this.init();
 
 	}
@@ -43,22 +45,27 @@ public class AddGroupPopup extends VerticalLayout implements View {
 		String[] groups = { Groups.GROUP_ADMINS, Groups.GROUP_AUDITORS,
 				Groups.GROUP_CLIENTADMIN, Groups.GROUP_CLIENTS,
 				Groups.GROUP_EMPLOYEE, Groups.GROUP_MANAGERS };
-		IndexedContainer container = new IndexedContainer();
-		container.addContainerProperty(NAME, String.class, null);
-
-		ComboBox selectCombo = new ComboBox(bundle.combo_caption(), container);
-		selectCombo.setItemCaptionMode(ItemCaptionMode.PROPERTY);
-		selectCombo.setItemCaptionPropertyId(NAME);
+		ComboBox selectCombo = new ComboBox(bundle.combo_caption());
+	
+		selectCombo.setNullSelectionAllowed(false);
+	
 		selectCombo.addItems(groups);
 		this.addComponent(selectCombo);
+		
 		selectCombo
 				.addValueChangeListener(event -> selectedGroup = (String) selectCombo
 						.getValue());
 		this.addComponent(new Button(bundle.button_caption(),
-				click -> presenter.createMembership(user, selectedGroup)));
+				this::buttonClick ));
 		
 	}
 
+	private void buttonClick(ClickEvent event)
+	{
+		presenter.createMembership(user, selectedGroup);
+		presenter.getView().setGroups(presenter.findGroupsByUser(user));
+	}
+	
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub

@@ -1,9 +1,7 @@
 package nl.mycompany.webapp.ui.questionaire;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +20,6 @@ import nl.mycompany.webapp.event.EventTranslator;
 import nl.mycompany.webapp.exception.ComponentNotFoundException;
 import nl.mycompany.webapp.exception.QuestionNotFoundException;
 import nl.mycompany.webapp.ui.process.answerquestion.SingleQuestionComponent;
-import nl.mycompany.webapp.ui.question.QuestionairePresenterBundle;
 
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
@@ -34,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Component;
 
 @SpringComponent()
 @UIScope
@@ -63,8 +59,6 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 	AnswerQuestionService answerQuestionService;
 
 	private Questionaire questionaire;
-
-	QuestionairePresenterBundle bundle = new QuestionairePresenterBundle();
 
 	Map<Question, SingleQuestionComponent> components = new HashMap<>();
 
