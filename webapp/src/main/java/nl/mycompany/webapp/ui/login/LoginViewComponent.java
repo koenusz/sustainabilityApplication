@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.github.peholmst.i18n4vaadin.annotations.Messages;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
@@ -57,6 +58,7 @@ public class LoginViewComponent extends Panel implements LoginView {
 
 		final Button login = new Button(bundle.login_caption(), this::login);
 		layout.addComponent(login);
+		login.setClickShortcut(KeyCode.ENTER);
 		setContent(layout);
     }
 

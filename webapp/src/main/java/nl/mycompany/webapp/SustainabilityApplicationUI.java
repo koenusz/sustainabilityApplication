@@ -45,8 +45,11 @@ import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -73,7 +76,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 
 	private Navigator navigator;
 
-	private String fragmentAndParameters;
+	private String fragmentAndParameters = "/";
 
 	ResourceBundle i18nBundle;
 
@@ -98,7 +101,8 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 			@Message(key = "viewQuestionaireBuilderView", value = "View QuestionaireBuilder View"),
 			@Message(key = "viewClientView", value = "View Client View"),
 			@Message(key = "viewQuestionView", value = "View Question View"),
-			@Message(key = "viewUserView", value = "View User View")
+			@Message(key = "viewUserView", value = "View User View"),
+			@Message(key = "logout", value = "Logout")
 
 	})
 	@Override
@@ -114,13 +118,10 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		root.setSpacing(true);
 		setContent(root);
 
-		final CssLayout navigationBar = new CssLayout();
+		final HorizontalLayout navigationBar = new HorizontalLayout();
 		navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
-		navigationBar.addComponent(createNavigationButton(
-				bundle.viewScopedView(), ScopedView.VIEW_NAME));
-		navigationBar.addComponent(createNavigationButton(
-				bundle.viewDefaultView(), DefaultView.VIEW_NAME));
+
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewLoginView(), LoginView.VIEW_NAME));
 		navigationBar.addComponent(createNavigationButton(
@@ -130,9 +131,12 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewQuestionaireBuilderView(), QuestionaireBuilderView.VIEW_NAME));
 		navigationBar.addComponent(createNavigationButton(
-				bundle.viewClientView(), ClientView.VIEW_NAME));
-		navigationBar.addComponent(createNavigationButton(
 				bundle.viewUserView(), UserView.VIEW_NAME));
+		
+		Button logoutButton = new Button(bundle.logout(), click -> logOut());
+		logoutButton.addStyleName(ValoTheme.BUTTON_SMALL);
+		navigationBar.addComponent(logoutButton);
+		navigationBar.setComponentAlignment(logoutButton, Alignment.MIDDLE_RIGHT);
 		
 		root.addComponent(navigationBar);
 
@@ -143,7 +147,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 
 		navigator = new Navigator(this, viewContainer);
 		navigator.addProvider(viewProvider);
-
+		
 		// we'll handle permissions with a listener here, you could also do
 		// that in the View itself.
 		navigator.addViewChangeListener(new ViewChangeListener() {
@@ -154,7 +158,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 				LOG.debug("view: " + event.getViewName());
 				if (SustainabilityApplicationUI.getCurrent().getLoggedInUser() == null
 						&& !event.getViewName().equals("login")) {
-					// Show to LoginView instead, pass intended view
+					// Show to TaskView instead, pass intended view
 					fragmentAndParameters = event.getViewName();
 					if (event.getParameters() != null) {
 						fragmentAndParameters += "/";
@@ -184,6 +188,13 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	}
 	
 
+	public void logOut()
+	{
+		this.setLoggedInUser(null);
+		this.getPage().setLocation("/");
+		this.getSession().close();
+	}
+	
 	private Button createNavigationButton(String caption, final String viewName) {
 		Button button = new Button(caption);
 		button.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -210,6 +221,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 	}
 
 	public void navigateToFragmentAndParameters() {
+
 		SustainabilityApplicationUI.navigateTo(fragmentAndParameters);
 	}
 	public static void navigateTo(String viewName) {

@@ -16,6 +16,8 @@ import nl.mycompany.webapp.abstracts.AbstractPresenter;
 import nl.mycompany.webapp.abstracts.ViewEvent;
 import nl.mycompany.webapp.aspect.EngineLogin;
 import nl.mycompany.webapp.event.ActivitiEventSubscriber;
+import nl.mycompany.webapp.event.ClientChangedEvent;
+import nl.mycompany.webapp.event.EventBus;
 import nl.mycompany.webapp.event.EventTranslator;
 import nl.mycompany.webapp.exception.ComponentNotFoundException;
 import nl.mycompany.webapp.exception.QuestionNotFoundException;
@@ -57,6 +59,9 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 
 	@Autowired
 	AnswerQuestionService answerQuestionService;
+	
+	@Autowired
+	private EventBus eventBus;
 
 	private Questionaire questionaire;
 
@@ -67,7 +72,12 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 		LOG.debug("subscribing");
 		SustainabilityApplicationUI.addActivityEventSubscriber(this,
 				Arrays.asList(ActivitiEventType.TASK_CREATED));
-
+		eventBus.subscribe(this);
+		updateQuestionaire();
+	}
+	
+	private void updateQuestionaire()
+	{
 		questionaire = questionaireService
 				.findLatestQuestionaireByClient(SustainabilityApplicationUI
 						.getCurrent().getLoggedInUser().getClient());
@@ -154,6 +164,13 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 	public void fireViewEvent(ViewEvent event) {
 
 		this.getView().fireViewEvent(event);
+		
+		if (event instanceof ClientChangedEvent) {
+			SustainabilityApplicationUI.getCurrent().getLoggedInUser()
+					.setClient(((ClientChangedEvent) event).getClient());
+			updateQuestionaire();	
+		}
+		
 	}
 
 	@Override

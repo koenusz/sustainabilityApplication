@@ -51,7 +51,7 @@ public class MainViewImplementation extends Panel implements MainView {
 
             	//((SustainabilityApplicationUI)UI.getCurrent()).setLoggedInUser(null);
             	logOut.setCaption("Login");
-            	//navigator.navigateTo(LoginView.NAME);
+            	//navigator.navigateTo(TaskView.NAME);
                 
             }
         });

@@ -361,7 +361,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.plugin.version}</version>
 				<configuration>
-					
+					<scanIntervalSeconds>2</scanIntervalSeconds>
 					<jettyXml>src/test/resources/jetty-jmx.xml</jettyXml>
 					<jvmArgs>-Dspring.liveBeansView.mbeanDomain -Xdebug
 						-agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n</jvmArgs>
