@@ -29,6 +29,12 @@ public abstract class AbstractProcessServiceImpl {
                 singleResult();
     }
     
+    protected Task findActiveTask(ProcessInstance processInstance) {
+        return taskService.createTaskQuery().
+                processInstanceId(processInstance.getId()).active().
+                singleResult();
+    }
+    
     protected String getFullNameOfUser(String userId) {
         User user = identityService.createUserQuery().userId(userId).singleResult();
         if (user == null) {
@@ -37,6 +43,12 @@ public abstract class AbstractProcessServiceImpl {
             return String.format("%s %s", user.getFirstName(), user.getLastName());
         }
     }   
+    
+    protected void setCurrentUserAsOwner(String processInstanceId)
+    {
+    	Task theTask = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+    	taskService.setOwner(theTask.getId(), Authentication.getAuthenticatedUserId());
+    }
     
     public void claimCurrentTaskByCurrentUser(String processInstanceId)
     {

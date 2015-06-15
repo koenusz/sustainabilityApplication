@@ -72,7 +72,7 @@ public class AnswerQuestionTest {
 		// check if the process is there
 
 		ProcessInstance processInstance = service
-				.getProcessInstanceForQuestion(question);
+				.findProcessInstanceForQuestion(question);
 		assertNotNull(processInstance);
 
 		// claim the task
@@ -104,7 +104,7 @@ public class AnswerQuestionTest {
 		// check if the process is there
 
 		ProcessInstance processInstance = service
-				.getProcessInstanceForQuestion(question);
+				.findProcessInstanceForQuestion(question);
 		assertNotNull(processInstance);
 
 		// claim the task
@@ -144,16 +144,15 @@ public class AnswerQuestionTest {
 		// check if the process is there
 
 		ProcessInstance processInstance = service
-				.getProcessInstanceForQuestion(question);
+				.findProcessInstanceForQuestion(question);
 		assertNotNull(processInstance);
 
 		// claim the task
 
 		Task theAnswerTask = taskService.createTaskQuery()
-				.processInstanceId(processInstance.getId())
-				.taskCandidateGroup("clients").singleResult();
+				.processInstanceId(processInstance.getId()).active().singleResult();
 
-		taskService.claim(theAnswerTask.getId(), "testClient");
+		taskService.setAssignee(theAnswerTask.getId(), "testClient");
 
 		service.answerQuestion(question, "de kaboutertjes");
 

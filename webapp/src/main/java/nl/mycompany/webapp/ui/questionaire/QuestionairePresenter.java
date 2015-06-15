@@ -9,6 +9,7 @@ import javax.annotation.PreDestroy;
 
 import nl.mycompany.questionaire.domain.Question;
 import nl.mycompany.questionaire.domain.Questionaire;
+import nl.mycompany.questionaire.identity.AccessDeniedException;
 import nl.mycompany.questionaire.service.process.AnswerQuestionService;
 import nl.mycompany.questionaire.service.repository.QuestionaireService;
 import nl.mycompany.webapp.SustainabilityApplicationUI;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Notification;
 
 @SpringComponent()
 @UIScope
@@ -97,6 +99,9 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 					.startQuestionProcess(findQuestionByComponent(component));
 		} catch (QuestionNotFoundException e) {
 			e.printStackTrace();
+		} catch (AccessDeniedException a)
+		{
+			Notification.show(a.getMessage(), Notification.Type.WARNING_MESSAGE);
 		}
 	}
 
@@ -109,8 +114,8 @@ public class QuestionairePresenter extends AbstractPresenter<QuestionaireView>
 		} catch (QuestionNotFoundException e) {
 			e.printStackTrace();
 		}
-		return answerQuestionService.getProcessInstanceForQuestion(question) != null ? answerQuestionService
-				.getProcessInstanceForQuestion(question).getActivityId() : "new";
+		return answerQuestionService.findProcessInstanceForQuestion(question) != null ? answerQuestionService
+				.findProcessInstanceForQuestion(question).getActivityId() : "new";
 	}
 
 	private Question findQuestionByComponent(SingleQuestionComponent component)

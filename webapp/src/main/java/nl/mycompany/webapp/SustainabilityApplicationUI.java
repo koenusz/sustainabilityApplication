@@ -20,6 +20,7 @@ import nl.mycompany.webapp.ui.question.QuestionPresenter;
 import nl.mycompany.webapp.ui.question.QuestionView;
 import nl.mycompany.webapp.ui.questionaire.QuestionaireView;
 import nl.mycompany.webapp.ui.questionairebuilder.QuestionaireBuilderView;
+import nl.mycompany.webapp.ui.task.TaskView;
 import nl.mycompany.webapp.ui.user.UserView;
 
 import org.activiti.engine.RuntimeService;
@@ -102,6 +103,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 			@Message(key = "viewClientView", value = "View Client View"),
 			@Message(key = "viewQuestionView", value = "View Question View"),
 			@Message(key = "viewUserView", value = "View User View"),
+			@Message(key = "viewTaskView", value = "View Task View"),
 			@Message(key = "logout", value = "Logout")
 
 	})
@@ -118,9 +120,10 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		root.setSpacing(true);
 		setContent(root);
 
+		// TODO add header with icon and client
+
 		final HorizontalLayout navigationBar = new HorizontalLayout();
 		navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-
 
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewLoginView(), LoginView.VIEW_NAME));
@@ -129,15 +132,21 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewQuestionView(), QuestionView.VIEW_NAME));
 		navigationBar.addComponent(createNavigationButton(
-				bundle.viewQuestionaireBuilderView(), QuestionaireBuilderView.VIEW_NAME));
+				bundle.viewQuestionaireBuilderView(),
+				QuestionaireBuilderView.VIEW_NAME));
+		navigationBar.addComponent(createNavigationButton(
+				bundle.viewTaskView(),
+				TaskView.VIEW_NAME));
+		
 		navigationBar.addComponent(createNavigationButton(
 				bundle.viewUserView(), UserView.VIEW_NAME));
-		
+
 		Button logoutButton = new Button(bundle.logout(), click -> logOut());
 		logoutButton.addStyleName(ValoTheme.BUTTON_SMALL);
 		navigationBar.addComponent(logoutButton);
-		navigationBar.setComponentAlignment(logoutButton, Alignment.MIDDLE_RIGHT);
-		
+		navigationBar.setComponentAlignment(logoutButton,
+				Alignment.MIDDLE_RIGHT);
+
 		root.addComponent(navigationBar);
 
 		final Panel viewContainer = new Panel();
@@ -147,7 +156,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 
 		navigator = new Navigator(this, viewContainer);
 		navigator.addProvider(viewProvider);
-		
+
 		// we'll handle permissions with a listener here, you could also do
 		// that in the View itself.
 		navigator.addViewChangeListener(new ViewChangeListener() {
@@ -186,15 +195,13 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 		addDetachListener(this);
 
 	}
-	
 
-	public void logOut()
-	{
+	public void logOut() {
 		this.setLoggedInUser(null);
 		this.getPage().setLocation("/");
 		this.getSession().close();
 	}
-	
+
 	private Button createNavigationButton(String caption, final String viewName) {
 		Button button = new Button(caption);
 		button.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -224,6 +231,7 @@ public class SustainabilityApplicationUI extends UI implements I18NProvider,
 
 		SustainabilityApplicationUI.navigateTo(fragmentAndParameters);
 	}
+
 	public static void navigateTo(String viewName) {
 		getCurrent().navigator.navigateTo(viewName);
 	}

@@ -9,7 +9,6 @@ import nl.mycompany.webapp.abstracts.ViewEvent;
 import nl.mycompany.webapp.event.ClientChangedEvent;
 import nl.mycompany.webapp.ui.client.ClientPresenter;
 import nl.mycompany.webapp.ui.client.ClientView;
-import nl.mycompany.webapp.ui.question.QuestionPresenter;
 
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
@@ -37,9 +36,8 @@ import com.vaadin.ui.VerticalLayout;
 public class UserViewComponent extends VerticalLayout implements UserView {
 
 	public UserViewComponentBundle bundle = new UserViewComponentBundle();
-	
-	private static final Logger LOG = Logger
-			.getLogger(UserViewComponent.class);
+
+	private static final Logger LOG = Logger.getLogger(UserViewComponent.class);
 
 	@Autowired
 	private UserPresenter presenter;
@@ -75,7 +73,11 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 			@Message(key = "delete", value = "Delete {0}"),
 			@Message(key = "change", value = "Change {0}") })
 	private void init() {
-		presenter.setView(this);
+
+		if (null == SustainabilityApplicationUI.getCurrent().getLoggedInUser())
+			return;
+
+			presenter.setView(this);
 		this.setMargin(true);
 		this.setSpacing(true);
 
@@ -130,7 +132,7 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 			changeClientpopup = new PopupView(null, new ChangeClientPopup(
 					clientPresenter));
 			changeClientpopup.setHideOnMouseOut(false);
-			
+
 			this.addComponent(changeClientpopup);
 
 			// the admin panel for the client
@@ -162,7 +164,8 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 					Alignment.BOTTOM_CENTER);
 
 			HorizontalLayout groupAdminPanel = new HorizontalLayout();
-			Button addGroupButton = new Button(bundle.add(bundle.group()), this::addMembership);
+			Button addGroupButton = new Button(bundle.add(bundle.group()),
+					this::addMembership);
 			Button removeGroupButton = new Button(
 					bundle.remove(bundle.group()), this::deleteMembership);
 			groupAdminPanel.addComponent(addGroupButton);
@@ -172,8 +175,29 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 			groupPanel.setComponentAlignment(groupAdminPanel,
 					Alignment.BOTTOM_CENTER);
 
+			Button addClientButton = new Button(bundle.add(bundle.client()),
+					this::addClient);
+
+			groupAdminPanel.addComponent(addClientButton);
+
 		}
 
+	}
+
+	private void addClient(ClickEvent event) {
+		User user = (User) userList.getValue();
+		LOG.debug("adding member");
+		if (user == null) {
+			Notification.show(bundle.message_noselecteduser(),
+					Notification.Type.WARNING_MESSAGE);
+		} else {
+			LOG.debug("select client PopUp");
+			addGroupPopup = new PopupView(null, new AddClientPopup(presenter,
+					clientPresenter, user));
+			this.addComponent(addGroupPopup);
+			addGroupPopup.setPopupVisible(true);
+			addGroupPopup.setHideOnMouseOut(false);
+		}
 	}
 
 	@Message(key = "message.noselectedgroup", value = "No group selected.")
@@ -206,13 +230,13 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 					user));
 			this.addComponent(addGroupPopup);
 			addGroupPopup.setPopupVisible(true);
+			addGroupPopup.setHideOnMouseOut(false);
 		}
 
 	}
 
 	@Message(key = "message.userdeleted", value = "User {0} is deleted.")
 	private void deleteUser(ClickEvent event) {
-		
 
 		if (userList.getValue() == null) {
 			Notification.show(bundle.message_noselecteduser(),
@@ -245,6 +269,7 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 				(User) userList.getValue(), presenter));
 		this.addComponent(userPopup);
 		userPopup.setPopupVisible(true);
+		userPopup.setHideOnMouseOut(false);
 
 	}
 
@@ -289,6 +314,7 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setUsers(List<User> users) {
 
@@ -306,6 +332,7 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 		userList.setNullSelectionAllowed(false);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	@Messages({
 			@Message(key = "caption.groupList", value = "Groups for user {0}"),
@@ -335,7 +362,7 @@ public class UserViewComponent extends VerticalLayout implements UserView {
 		}
 
 		groupList.setNullSelectionAllowed(false);
-
+		addGroupPopup.setVisible(false);
 	}
 
 }

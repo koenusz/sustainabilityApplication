@@ -7,8 +7,8 @@ import org.vaadin.activiti.simpletravel.ui.dashboard.DashboardPresenter;
 
 public class AssignedTaskList extends TaskList {
 
-    public AssignedTaskList(DashboardPresenter presenter) {
-        super(presenter);
+    public AssignedTaskList(DashboardPresenter userPresenter) {
+        super(userPresenter);
     }
 
     @Override

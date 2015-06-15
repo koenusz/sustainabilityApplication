@@ -41,7 +41,7 @@ public class EventBus {
 	/**
 	 * This method is used let presenters subscribe to the event bus
 	 * 
-	 * @param presenter
+	 * @param userPresenter
 	 */
 	public void subscribe( AbstractPresenter<? extends View> presenter)
 	{
@@ -51,7 +51,7 @@ public class EventBus {
 	/**
 	 * This method is used let presenters unsubscribe to the event bus
 	 * 
-	 * @param presenter
+	 * @param userPresenter
 	 */
 	public void unSubscribe( AbstractPresenter<? extends View> presenter)
 	{

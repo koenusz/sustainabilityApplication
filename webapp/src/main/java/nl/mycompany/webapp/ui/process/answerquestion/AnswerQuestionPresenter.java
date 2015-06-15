@@ -40,8 +40,8 @@ public class AnswerQuestionPresenter extends
 
 	public String getQuestionStatus() {
 
-		return answerQuestionService.getProcessInstanceForQuestion(question) != null ? answerQuestionService
-				.getProcessInstanceForQuestion(question).getActivityId() : null;
+		return answerQuestionService.findProcessInstanceForQuestion(question) != null ? answerQuestionService
+				.findProcessInstanceForQuestion(question).getActivityId() : null;
 	}
 
 	public Question getQuestion() {

@@ -24,7 +24,7 @@ public class EventTranslatorImpl implements EventTranslator {
 		Question question = answerQuestionService
 				.findQuestionByProcessInstance(event.getProcessInstanceId());
 		String activityId = answerQuestionService
-				.getProcessInstanceForQuestion(question).getActivityId();
+				.findProcessInstanceForQuestion(question).getActivityId();
 		return new AnswerQuestionStatusEvent(view, activityId, question);
 
 	}

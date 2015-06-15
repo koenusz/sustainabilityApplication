@@ -8,11 +8,9 @@ import org.activiti.engine.identity.User;
 
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.github.peholmst.i18n4vaadin.annotations.Messages;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.VerticalLayout;
 
@@ -25,8 +23,6 @@ public class AddGroupPopup extends VerticalLayout implements View {
 	private User user;
 
 	private String selectedGroup;
-
-	private static final String NAME = "name";
 
 	public AddGroupPopup(UserPresenter presenter, User user) {
 		super();

@@ -220,16 +220,19 @@ public class QuestionaireBuilderViewImpl extends HorizontalLayout implements
 				// Get ids of the dragged item and the target item
 				Object sourceItemId = t.getData("itemId");
 				Object targetItemId = target.getItemIdOver();
-
+				
 				// Do not allow drop on the item itself
 				if (sourceItemId.equals(targetItemId))
 					return;
-
+			
+				//get the question, if the item is a domain, exit.
 				Question bean = null;
 				if (sourceItemId instanceof BeanItem<?>)
 					bean = (Question) ((BeanItem<?>) sourceItemId).getBean();
 				else if (sourceItemId instanceof Question)
 					bean = (Question) sourceItemId;
+				else
+					return;
 
 				// On which side of the target the item was dropped
 				VerticalDropLocation location = target.getDropLocation();

@@ -1,10 +1,11 @@
 package nl.mycompany.webapp.ui.task;
 
+import java.util.Iterator;
+
 import javax.annotation.PostConstruct;
 
+import nl.mycompany.webapp.SustainabilityApplicationUI;
 import nl.mycompany.webapp.abstracts.ViewEvent;
-import nl.mycompany.webapp.ui.questionairebuilder.QuestionaireBuilderView;
-import nl.mycompany.webapp.ui.user.UserView;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.peholmst.i18n4vaadin.annotations.Message;
 import com.github.peholmst.i18n4vaadin.annotations.Messages;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.ExternalResource;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Link;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Tree;
+import com.vaadin.ui.Tree.TreeDragMode;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
@@ -26,33 +29,58 @@ public class TaskViewComponent extends Panel implements TaskView {
 			.getLogger(TaskViewComponent.class);
 
 	
-	HomeViewComponentBundle bundle = new HomeViewComponentBundle();
+	private Tree taskTree;
+	
+	TaskViewComponentBundle bundle = new TaskViewComponentBundle();
 	
 	@Autowired
 	TaskPresenter presenter;
 		
 	
 	@Messages({
-		@Message(key="caption.taskLink", value ="Manage Tasks"),
-		@Message(key="caption.userLink", value ="Manage Users"),
-		@Message(key="caption.questionaireLink", value ="Manage Questionaire")
+		@Message(key="caption.userLabel", value ="User"),
+		@Message(key="caption.processLabel", value ="Process"),
+		
+		@Message(key="caption.taskLabel", value ="Task")
 	})
 	@PostConstruct
     void init() {
 		VerticalLayout layout = new VerticalLayout();
+	
+		Label userLabel = new Label(SustainabilityApplicationUI.getCurrent().getLoggedInUser().getName());
+		userLabel.setCaption(bundle.caption_userLabel());
+	
+		layout.addComponent(userLabel);
 		
-		Link taskLink  = new Link(bundle.caption_taskLink(),new ExternalResource("#!" + ""));
-		Link userLink  = new Link(bundle.caption_userLink(), new ExternalResource("#!" + UserView.VIEW_NAME));
-		Link questionaireLink  = new Link(bundle.caption_questionaireLink(), new ExternalResource("#!" + QuestionaireBuilderView.VIEW_NAME));
 		
+		HorizontalLayout taskLayout = new HorizontalLayout();
 		
-		layout.addComponent(taskLink);
-		layout.addComponent(userLink);
-		layout.addComponent(questionaireLink);
+		taskTree = new Tree();
+		taskTree.setDragMode(TreeDragMode.NONE);
+
+		// Expand all nodes
+		for (Iterator<?> it = taskTree.rootItemIds().iterator(); it.hasNext();) {
+			taskTree.expandItemsRecursively(it.next());
+		}
+	
+		updateTaskTree();
+		taskLayout.addComponent(taskTree);
+		
+		VerticalLayout taskForm = new VerticalLayout();
+		Label placeholder = new Label("placeholder");
+		taskForm.addComponent(placeholder);
+		taskLayout.addComponent(taskForm);
+		
+		layout.addComponent(taskLayout);
 		
 		this.setContent(layout);
-		
     }
+	
+	private void updateTaskTree()
+	{
+		taskTree.setContainerDataSource(presenter.getTreeData());
+		taskTree.setItemCaptionPropertyId(TaskPresenter.ITEMCAPTUREPROPERTYID);
+	}
 
 	
 

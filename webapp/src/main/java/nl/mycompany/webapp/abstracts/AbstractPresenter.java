@@ -21,7 +21,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	 * 
 	 * 
 	 * @param view
-	 *            the view that uses the presenter (must not be
+	 *            the view that uses the userPresenter (must not be
 	 *            <code>null</code>).
 	 */
 	public AbstractPresenter(V view) {
@@ -39,7 +39,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	}
 
 	/**
-	 * Sets the view for this presenter.
+	 * Sets the view for this userPresenter.
 	 * 
 	 * @param view
 	 *            the view to set.
@@ -49,7 +49,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	}
 
 	/**
-	 * Gets the view that uses this presenter. If no view has been set, an
+	 * Gets the view that uses this userPresenter. If no view has been set, an
 	 * exception is thrown.
 	 * 
 	 * @return the view instance (never <code>null</code>).
@@ -99,7 +99,7 @@ public abstract class AbstractPresenter<V extends View>  {
 	}
 
 	/**
-	 * This method is called to initialize the presenter. When this happens, the
+	 * This method is called to initialize the userPresenter. When this happens, the
 	 * view will already be initialized, i.e. invoking any methods on the view
 	 * will not throw any exceptions.
 	 * <p>

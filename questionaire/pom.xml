@@ -140,9 +140,107 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>default</id>
+			<properties>
+				<environment>default</environment>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.code.maven-replacer-plugin</groupId>
+						<artifactId>replacer</artifactId>
+						<version>1.5.3</version>
+						<executions>
+							<execution>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>replace</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<file>target/classes/application.properties</file>
+							<tokenValueMap>etc/${environment}/application.conf</tokenValueMap>
+						</configuration>
+
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>homeserver</id>
+			<properties>
+				<environment>homeserver</environment>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.code.maven-replacer-plugin</groupId>
+						<artifactId>replacer</artifactId>
+						<version>1.5.3</version>
+						<executions>
+							<execution>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>replace</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<file>target/classes/application.properties</file>
+							<tokenValueMap>etc/${environment}/application.conf</tokenValueMap>
+						</configuration>
+
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.18.1</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+
+			</build>
+		</profile>
+
+
+	</profiles>
 	<build>
 
 		<plugins>
+			<!-- pluging for generating the DB schema -->
+			<plugin>
+				<groupId>de.juplo</groupId>
+				<artifactId>hibernate4-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>export</goal>
+						</goals>
+						<configuration>
+							<target>SCRIPT</target>
+							<hibernateDialect>org.hibernate.dialect.MySQLDialect</hibernateDialect>
+						</configuration>
+					</execution>
+				</executions>
+
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -180,6 +278,7 @@
 					<source>${project.source.version}</source>
 					<target>${project.target.version}</target>
 					<complianceLevel>${project.target.version}</complianceLevel>
+					<forceAjcCompile>true</forceAjcCompile>
 				</configuration>
 				<executions>
 					<execution>
@@ -200,6 +299,42 @@
 
 
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.google.code.maven-replacer-plugin
+										</groupId>
+										<artifactId>
+											replacer
+										</artifactId>
+										<versionRange>
+											[1.5.3,)
+										</versionRange>
+										<goals>
+											<goal>replace</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

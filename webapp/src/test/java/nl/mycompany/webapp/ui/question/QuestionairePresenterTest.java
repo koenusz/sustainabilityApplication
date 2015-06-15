@@ -60,7 +60,7 @@ public class QuestionairePresenterTest implements ApplicationContextAware, Servl
 	private ClientRepository clientRepo;
 	
 	
-	private QuestionaireBuilderPresenter presenter;
+	private QuestionaireBuilderPresenter userPresenter;
 	
 	private ApplicationContext applicationContext;
 	
@@ -81,7 +81,7 @@ public class QuestionairePresenterTest implements ApplicationContextAware, Servl
 	public void initTest()
 	{
 		//check if theQuestionaire object is initialized
-		assertEquals("testQuestionaire", presenter.getQuestionaire().getName());
+		assertEquals("testQuestionaire", userPresenter.getQuestionaire().getName());
 		
 	}
 	
@@ -123,7 +123,7 @@ public class QuestionairePresenterTest implements ApplicationContextAware, Servl
         assertNotNull(questionRepo);
         assertNotNull(questionaireRepo);
         assertNotNull(clientRepo);
-        assertNotNull(presenter);
+        assertNotNull(userPresenter);
     }
 		
 	
